@@ -5,7 +5,7 @@ interface ExerciceVideo {
   female: string;
 }
 
-interface ExerciceProps {
+export interface ExerciceProps {
   name: string;
   muscle: string;
   mode: string;

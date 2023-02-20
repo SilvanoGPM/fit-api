@@ -1,7 +1,7 @@
 export interface Pageable {
   page: number;
   size: number;
-  sort: string;
+  sort?: string;
 }
 
 export interface Page<T> {
