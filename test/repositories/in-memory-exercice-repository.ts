@@ -17,6 +17,18 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     return this.getPage({ exercices: this.exercices, ...params });
   }
 
+  async findById(id: string) {
+    const exercice = this.exercices.find(
+      (innerExercice) => innerExercice.id === id,
+    );
+
+    if (!exercice) {
+      return null;
+    }
+
+    return exercice;
+  }
+
   async search({
     mode,
     muscle,
