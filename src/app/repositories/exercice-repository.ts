@@ -1,6 +1,6 @@
 import { Exercice } from '@app/entities/exercice';
 
-import { Page, Pageable } from './pages.type';
+import type { Page, Pageable } from './pages.type';
 
 export interface SearchExercice extends Pageable {
   mode?: string;

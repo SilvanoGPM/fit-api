@@ -1,18 +1,17 @@
 import { Exercice } from '@app/entities/exercice';
+import type { Pageable, Page } from '@app/repositories/pages.type';
 
-import {
+import type {
   ExerciceRepository,
   SearchExercice,
 } from '@app/repositories/exercice-repository';
-
-import { Pageable, Page } from '@app/repositories/pages.type';
 
 interface GetPageParams extends Pageable {
   exercices: Exercice[];
 }
 
 export class InMemoryExerciceRepository implements ExerciceRepository {
-  constructor(private exercices: Exercice[] = []) {}
+  constructor(public exercices: Exercice[] = []) {}
 
   async findMany(params: Pageable) {
     return this.getPage({ exercices: this.exercices, ...params });
@@ -52,11 +51,17 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
   }
 
   async create(exercice: Exercice): Promise<void> {
-    throw new Error('Method not implemented.');
+    this.exercices.push(exercice);
   }
 
   async save(exercice: Exercice): Promise<void> {
-    throw new Error('Method not implemented.');
+    const index = this.exercices.findIndex(
+      (innerExercice) => innerExercice.id === exercice.id,
+    );
+
+    if (index >= 0) {
+      this.exercices[index] = exercice;
+    }
   }
 
   private getPage({ exercices, page, size }: GetPageParams) {
