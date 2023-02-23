@@ -1,12 +1,13 @@
 import { BaseEntity } from './base-entity';
 
 interface ExerciceVideo {
-  male: string;
-  female: string;
+  male: string[];
+  female: string[];
 }
 
 export interface ExerciceProps {
   name: string;
+  difficulty: string;
   muscle: string;
   mode: string;
   steps: string[];
@@ -25,6 +26,14 @@ export class Exercice extends BaseEntity {
 
   public set name(name: string) {
     this.props.name = name;
+  }
+
+  public get difficulty() {
+    return this.props.difficulty;
+  }
+
+  public set difficulty(difficulty: string) {
+    this.props.difficulty = difficulty;
   }
 
   public get muscle() {

@@ -11,13 +11,14 @@ describe('CreateExercice use case', () => {
 
     const params = {
       name: 'test-name',
+      difficulty: 'test-difficulty',
       muscle: 'test-muscle',
       mode: 'test-mode',
       steps: ['test-first-step'],
 
       videos: {
-        male: 'test-male-video',
-        female: 'test-female-video',
+        male: ['test-male-video'],
+        female: ['test-female-video'],
       },
     };
 

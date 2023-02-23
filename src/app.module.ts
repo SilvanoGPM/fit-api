@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 
+import { StaticModule } from '@infra/static/static.module';
+
 @Module({
-  imports: [],
+  imports: [StaticModule],
 })
 export class AppModule {}
