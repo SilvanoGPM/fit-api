@@ -105,7 +105,10 @@ export class StaticExerciceRepository implements ExerciceRepository {
   }
 
   private async loadData() {
-    const rawData = await this.io.read<any>({ path: '../data/exercices.json' });
+    const path =
+      'C:\\Users\\usuario\\Documents\\projects\\fit-api\\src\\infra\\static\\repositories\\data\\exercices.json';
+
+    const rawData = await this.io.read<any>({ path });
 
     for (const muscle of Object.keys(rawData)) {
       for (const rawExercice of rawData[muscle]) {

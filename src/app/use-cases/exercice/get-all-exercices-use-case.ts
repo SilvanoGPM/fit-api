@@ -1,8 +1,11 @@
+import { Injectable } from '@nestjs/common';
+
 import { ExerciceRepository } from '@app/repositories/exercice-repository';
 import { Pageable } from '@app/repositories/pages.type';
 
 type ExecuteParams = Pageable;
 
+@Injectable()
 export class GetAllExercicesUseCase {
   constructor(private exerciceRepository: ExerciceRepository) {}
 

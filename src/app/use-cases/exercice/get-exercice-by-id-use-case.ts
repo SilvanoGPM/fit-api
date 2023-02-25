@@ -1,5 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { ExerciceRepository } from '@app/repositories/exercice-repository';
 
+@Injectable()
 export class GetExerciceByIdUseCase {
   constructor(private exerciceRepository: ExerciceRepository) {}
 

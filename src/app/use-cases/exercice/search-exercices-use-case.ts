@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import {
   ExerciceRepository,
   type SearchExercice,
@@ -5,6 +7,7 @@ import {
 
 type ExecuteParams = SearchExercice;
 
+@Injectable()
 export class SearchExercicesUseCase {
   constructor(private exerciceRepository: ExerciceRepository) {}
 

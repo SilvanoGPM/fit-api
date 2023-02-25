@@ -1,8 +1,11 @@
+import { Injectable } from '@nestjs/common';
+
 import { Exercice, type ExerciceProps } from '@app/entities/exercice';
 import { ExerciceRepository } from '@app/repositories/exercice-repository';
 
 type ExecuteParams = ExerciceProps & { id: string };
 
+@Injectable()
 export class ReplaceExerciceUseCase {
   constructor(private exerciceRepository: ExerciceRepository) {}
 
