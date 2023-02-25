@@ -8,6 +8,7 @@ import { ReplaceExerciceUseCase } from '@app/use-cases/exercice/replace-exercice
 import { SearchExercicesUseCase } from '@app/use-cases/exercice/search-exercices-use-case';
 
 import { ExerciceController } from './controllers/exercice.controller';
+import { GenericService } from './services/generic.service';
 
 @Module({
   imports: [StaticModule],
@@ -18,6 +19,7 @@ import { ExerciceController } from './controllers/exercice.controller';
     GetExerciceByIdUseCase,
     ReplaceExerciceUseCase,
     SearchExercicesUseCase,
+    GenericService,
   ],
 })
 export class HttpModule {}

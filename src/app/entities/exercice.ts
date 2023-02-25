@@ -69,6 +69,6 @@ export class Exercice extends BaseEntity {
   }
 
   toJSON() {
-    return this.props;
+    return { _id: this.id, ...this.props };
   }
 }
