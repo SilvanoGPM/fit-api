@@ -41,12 +41,13 @@ export class StaticExerciceRepository implements ExerciceRepository {
   async search({
     mode,
     muscle,
+    difficulty,
     name,
     ...params
   }: SearchExercice): Promise<Page<Exercice>> {
     function like(first: string, second?: string) {
-      if (!second) {
-        return false;
+      if (second === undefined || second === '') {
+        return true;
       }
 
       return first.toLowerCase().includes(second.toLowerCase());
@@ -62,19 +63,14 @@ export class StaticExerciceRepository implements ExerciceRepository {
       }
 
       return exercices.filter((exercice) => {
-        if (like(exercice.name, name)) {
-          return true;
-        }
+        const hasName = like(exercice.name, name);
+        const hasMuscle = like(exercice.muscle, muscle);
+        const hasDifficulty = like(exercice.difficulty, difficulty);
+        const hasMode = like(exercice.mode, mode);
 
-        if (like(exercice.mode, mode)) {
-          return true;
-        }
+        const shouldPass = hasName && hasMuscle && hasDifficulty && hasMode;
 
-        if (like(exercice.muscle, muscle)) {
-          return true;
-        }
-
-        return false;
+        return shouldPass;
       });
     }
 

@@ -6,15 +6,17 @@ describe('Exercice entity', () => {
 
     expect(exercice).toEqual(
       expect.objectContaining({
+        _id: expect.any(String),
         name: expect.any(String),
         mode: expect.any(String),
+        difficulty: expect.any(String),
         muscle: expect.any(String),
 
         steps: expect.arrayContaining([expect.any(String)]),
 
         videos: expect.objectContaining({
-          male: expect.any(String),
-          female: expect.any(String),
+          male: expect.arrayContaining([expect.any(String)]),
+          female: expect.arrayContaining([expect.any(String)]),
         }),
       }),
     );

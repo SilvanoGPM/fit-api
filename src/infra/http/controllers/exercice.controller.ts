@@ -43,12 +43,15 @@ export class ExerciceController {
   }
 
   @Get('search')
-  async search(@Query() { name, muscle, mode, ...query }: SearchExercice) {
+  async search(
+    @Query() { name, muscle, mode, difficulty, ...query }: SearchExercice,
+  ) {
     const { page, size } = this.genericService.getPageParamsByQuery(query);
 
     const { exercices } = await this.searchExercices.execute({
       name,
       muscle,
+      difficulty,
       mode,
       page,
       size,
