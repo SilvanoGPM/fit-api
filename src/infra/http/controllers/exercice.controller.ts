@@ -3,7 +3,6 @@ import {
   Get,
   Query,
   Param,
-  NotFoundException,
   Post,
   Body,
   HttpCode,
@@ -21,6 +20,7 @@ import { Pageable } from '@app/repositories/pages.type';
 import { GenericService } from '../services/generic.service';
 import { CreateExerciceDTO } from '../dtos/exercices/create-exercice.dto';
 import { ReplaceExerciceDTO } from '../dtos/exercices/replace-exercice.dto';
+import { ExerciceNotFoundError } from '../errors/exercice-not-found.error';
 
 @Controller('exercices')
 export class ExerciceController {
@@ -62,15 +62,13 @@ export class ExerciceController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    const { exercice } = await this.getExerciceById.execute(id);
+    try {
+      const { exercice } = await this.getExerciceById.execute(id);
 
-    if (!exercice) {
-      throw new NotFoundException('Exercice not found', {
-        description: `Exercice with id [${id}] not found`,
-      });
+      return { exercice };
+    } catch (error) {
+      throw new ExerciceNotFoundError(error);
     }
-
-    return { exercice };
   }
 
   @Post()
@@ -95,16 +93,20 @@ export class ExerciceController {
     const { id, name, mode, muscle, difficulty, steps, videos } =
       replaceExerciceDto;
 
-    const { exercice } = await this.replaceExercice.execute({
-      id,
-      name,
-      mode,
-      muscle,
-      difficulty,
-      steps,
-      videos,
-    });
+    try {
+      const { exercice } = await this.replaceExercice.execute({
+        id,
+        name,
+        mode,
+        muscle,
+        difficulty,
+        steps,
+        videos,
+      });
 
-    return { exercice };
+      return { exercice };
+    } catch (error) {
+      throw new ExerciceNotFoundError(error);
+    }
   }
 }

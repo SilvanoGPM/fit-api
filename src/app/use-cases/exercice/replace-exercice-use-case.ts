@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { Exercice, type ExerciceProps } from '@app/entities/exercice';
 import { ExerciceRepository } from '@app/repositories/exercice-repository';
 
+import { NotFoundError } from '../errors/not-found.error';
+
 type ExecuteParams = ExerciceProps & { id: string };
 
 @Injectable()
@@ -12,7 +14,11 @@ export class ReplaceExerciceUseCase {
   async execute({ id, ...props }: ExecuteParams) {
     const exercice = new Exercice(props, id);
 
-    await this.exerciceRepository.save(exercice);
+    const exists = await this.exerciceRepository.save(exercice);
+
+    if (!exists) {
+      throw new NotFoundError(`Exercice not found with id [${id}]`);
+    }
 
     return { exercice };
   }

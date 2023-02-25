@@ -77,18 +77,22 @@ export class StaticExerciceRepository implements ExerciceRepository {
     return this.getPage({ exercices: getExercices(this.exercices), ...params });
   }
 
-  async create(exercice: Exercice): Promise<void> {
+  async create(exercice: Exercice) {
     this.exercices.push(exercice);
   }
 
-  async save(exercice: Exercice): Promise<void> {
+  async save(exercice: Exercice) {
     const index = this.exercices.findIndex(
       (innerExercice) => innerExercice.id === exercice.id,
     );
 
-    if (index >= 0) {
+    const exists = index >= 0;
+
+    if (exists) {
       this.exercices[index] = exercice;
     }
+
+    return exists;
   }
 
   private getPage({ exercices, page, size }: GetPageParams) {

@@ -14,5 +14,5 @@ export abstract class ExerciceRepository {
   abstract findById(id: string): Promise<Exercice | null>;
   abstract search(params: SearchExercice): Promise<Page<Exercice>>;
   abstract create(exercice: Exercice): Promise<void>;
-  abstract save(exercice: Exercice): Promise<void>;
+  abstract save(exercice: Exercice): Promise<boolean>;
 }
