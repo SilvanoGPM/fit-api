@@ -43,23 +43,33 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
       return first.toLowerCase().includes(second.toLowerCase());
     }
 
-    const exercices = this.exercices.filter((exercice) => {
-      if (like(exercice.name, name)) {
-        return true;
+    function getExercices(exercices: Exercice[]) {
+      const allParamsUndefined = [mode, muscle, name].every(
+        (param) => param === undefined,
+      );
+
+      if (allParamsUndefined) {
+        return exercices;
       }
 
-      if (like(exercice.mode, mode)) {
-        return true;
-      }
+      return exercices.filter((exercice) => {
+        if (like(exercice.name, name)) {
+          return true;
+        }
 
-      if (like(exercice.muscle, muscle)) {
-        return true;
-      }
+        if (like(exercice.mode, mode)) {
+          return true;
+        }
 
-      return false;
-    });
+        if (like(exercice.muscle, muscle)) {
+          return true;
+        }
 
-    return this.getPage({ exercices, ...params });
+        return false;
+      });
+    }
+
+    return this.getPage({ exercices: getExercices(this.exercices), ...params });
   }
 
   async create(exercice: Exercice): Promise<void> {
