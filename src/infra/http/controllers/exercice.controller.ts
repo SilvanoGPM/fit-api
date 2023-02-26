@@ -9,11 +9,11 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { CreateExerciceUseCase } from '@app/use-cases/exercice/create-exercice-use-case';
-import { GetAllExercicesUseCase } from '@app/use-cases/exercice/get-all-exercices-use-case';
-import { GetExerciceByIdUseCase } from '@app/use-cases/exercice/get-exercice-by-id-use-case';
-import { ReplaceExerciceUseCase } from '@app/use-cases/exercice/replace-exercice-use-case';
-import { SearchExercicesUseCase } from '@app/use-cases/exercice/search-exercices-use-case';
+import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
+import { GetAllExercicesUseCase } from '@app/use-cases/exercices/get-all-exercices-use-case';
+import { GetExerciceByNameUseCase } from '@app/use-cases/exercices/get-exercice-by-name-use-case';
+import { ReplaceExerciceUseCase } from '@app/use-cases/exercices/replace-exercice-use-case';
+import { SearchExercicesUseCase } from '@app/use-cases/exercices/search-exercices-use-case';
 import { SearchExercice } from '@app/repositories/exercice-repository';
 import { Pageable } from '@app/repositories/pages.type';
 
@@ -27,7 +27,7 @@ export class ExerciceController {
   constructor(
     private createExercice: CreateExerciceUseCase,
     private getAllExercices: GetAllExercicesUseCase,
-    private getExerciceById: GetExerciceByIdUseCase,
+    private getExerciceByName: GetExerciceByNameUseCase,
     private replaceExercice: ReplaceExerciceUseCase,
     private searchExercices: SearchExercicesUseCase,
     private genericService: GenericService,
@@ -60,10 +60,10 @@ export class ExerciceController {
     return exercices;
   }
 
-  @Get(':id')
-  async findById(@Param('id') id: string) {
+  @Get(':name')
+  async findByName(@Param('name') name: string) {
     try {
-      const { exercice } = await this.getExerciceById.execute(id);
+      const { exercice } = await this.getExerciceByName.execute(name);
 
       return { exercice };
     } catch (error) {

@@ -17,10 +17,18 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     return this.getPage({ exercices: this.exercices, ...params });
   }
 
-  async findById(id: string) {
-    const exercice = this.exercices.find(
-      (innerExercice) => innerExercice.id === id,
-    );
+  async findByName(name: string) {
+    function findName(exercice: Exercice) {
+      const formattedExerciceName = exercice.name
+        .toLowerCase()
+        .replace('-', ' ');
+
+      const formattedName = name.toLowerCase().replace('-', ' ');
+
+      return formattedExerciceName === formattedName;
+    }
+
+    const exercice = this.exercices.find(findName);
 
     if (!exercice) {
       return null;

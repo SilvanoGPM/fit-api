@@ -26,10 +26,18 @@ export class StaticExerciceRepository implements ExerciceRepository {
     return this.getPage({ exercices: this.exercices, ...params });
   }
 
-  async findById(id: string) {
-    const exercice = this.exercices.find(
-      (innerExercice) => innerExercice.id === id,
-    );
+  async findByName(name: string) {
+    function formatName(string: string) {
+      return string.toLowerCase().replace(/\-/g, ' ');
+    }
+
+    const exercice = this.exercices.find((exercice) => {
+      const [formattedExerciceName, formattedName] = [exercice.name, name].map(
+        formatName,
+      );
+
+      return formattedExerciceName === formattedName;
+    });
 
     if (!exercice) {
       return null;

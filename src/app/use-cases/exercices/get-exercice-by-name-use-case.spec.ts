@@ -2,10 +2,10 @@ import { Exercice } from '@app/entities/exercice';
 import { makeExercice } from '@test/factories/exercice-factory';
 import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
 
-import { GetExerciceByIdUseCase } from './get-exercice-by-id-use-case';
+import { GetExerciceByNameUseCase } from './get-exercice-by-name-use-case';
 import { NotFoundError } from '../errors/not-found.error';
 
-describe('GetExerciceById use case', () => {
+describe('GetExerciceByName use case', () => {
   it('should be able to get an exercice', async () => {
     const initialExercice = makeExercice();
 
@@ -13,9 +13,9 @@ describe('GetExerciceById use case', () => {
       initialExercice,
     ]);
 
-    const getExerciceById = new GetExerciceByIdUseCase(exerciceRepository);
+    const getExerciceByName = new GetExerciceByNameUseCase(exerciceRepository);
 
-    const { exercice } = await getExerciceById.execute(initialExercice.id);
+    const { exercice } = await getExerciceByName.execute(initialExercice.name);
 
     expect(exercice).toBeInstanceOf(Exercice);
   });
@@ -27,10 +27,10 @@ describe('GetExerciceById use case', () => {
       initialExercice,
     ]);
 
-    const getExerciceById = new GetExerciceByIdUseCase(exerciceRepository);
+    const getExerciceById = new GetExerciceByNameUseCase(exerciceRepository);
 
     expect(() => {
-      return getExerciceById.execute('test-id');
+      return getExerciceById.execute('random-name');
     }).rejects.toThrow(NotFoundError);
   });
 });
