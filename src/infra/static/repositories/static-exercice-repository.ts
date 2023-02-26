@@ -123,8 +123,7 @@ export class StaticExerciceRepository implements ExerciceRepository {
   }
 
   private async loadData() {
-    const path =
-      'C:\\Users\\usuario\\Documents\\projects\\fit-api\\src\\infra\\static\\repositories\\data\\exercices.json';
+    const path = 'src\\infra\\static\\repositories\\data\\exercices.json';
 
     const rawData = await this.io.read<any>({ path });
 
