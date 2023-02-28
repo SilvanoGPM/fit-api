@@ -9,6 +9,14 @@ import {
   Put,
 } from '@nestjs/common';
 
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
 import { GetAllExercicesUseCase } from '@app/use-cases/exercices/get-all-exercices-use-case';
 import { GetExerciceByNameUseCase } from '@app/use-cases/exercices/get-exercice-by-name-use-case';
@@ -22,6 +30,7 @@ import { CreateExerciceDTO } from '../dtos/exercices/create-exercice.dto';
 import { ReplaceExerciceDTO } from '../dtos/exercices/replace-exercice.dto';
 import { ExerciceNotFoundError } from '../errors/exercice-not-found.error';
 
+@ApiTags('Exercices')
 @Controller('exercices')
 export class ExerciceController {
   constructor(
@@ -34,6 +43,8 @@ export class ExerciceController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'Retorna todos os exercícios com paginação.' })
+  @ApiOkResponse({ description: 'Exercícios encontrados com sucesso' })
   async getAll(@Query() query: Pageable) {
     const params = this.genericService.getPageParamsByQuery(query);
 
@@ -43,6 +54,8 @@ export class ExerciceController {
   }
 
   @Get('search')
+  @ApiOperation({ summary: 'Pesquisa exercícios com paginação.' })
+  @ApiOkResponse({ description: 'Exercícios encontrados com sucesso' })
   async search(
     @Query() { name, muscle, mode, difficulty, ...query }: SearchExercice,
   ) {
@@ -61,6 +74,9 @@ export class ExerciceController {
   }
 
   @Get(':name')
+  @ApiOperation({ summary: 'Retorna um exercício pelo nome.' })
+  @ApiOkResponse({ description: 'Exercício encontrado com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhum exercício encontrado' })
   async findByName(@Param('name') name: string) {
     try {
       const { exercice } = await this.getExerciceByName.execute(name);
@@ -73,6 +89,8 @@ export class ExerciceController {
 
   @Post()
   @HttpCode(201)
+  @ApiOperation({ summary: 'Persiste um novo exercício.' })
+  @ApiCreatedResponse({ description: 'Exercício foi criado com sucesso' })
   async create(@Body() createExerciceDto: CreateExerciceDTO) {
     const { name, mode, muscle, difficulty, steps, videos } = createExerciceDto;
 
@@ -89,6 +107,9 @@ export class ExerciceController {
   }
 
   @Put()
+  @ApiOperation({ summary: 'Atualiza um exercício' })
+  @ApiOkResponse({ description: 'Exercício atualizado com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhum exercício encontrado' })
   async replace(@Body() replaceExerciceDto: ReplaceExerciceDTO) {
     const { id, name, mode, muscle, difficulty, steps, videos } =
       replaceExerciceDto;
