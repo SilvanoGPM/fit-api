@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { v4 as randomUUID } from 'uuid';
 
 export class BaseEntity {
   protected _id: string;
