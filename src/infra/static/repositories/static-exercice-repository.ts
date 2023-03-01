@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { join } from 'path';
 
 import { Exercice } from '@app/entities/exercice';
 import type { Pageable, Page } from '@app/repositories/pages.type';
@@ -11,6 +12,8 @@ import type {
 interface GetPageParams extends Pageable {
   exercices: Exercice[];
 }
+
+import './data/exercices.json';
 
 import { IoService } from '../io.service';
 
@@ -123,7 +126,7 @@ export class StaticExerciceRepository implements ExerciceRepository {
   }
 
   private async loadData() {
-    const path = 'src\\infra\\static\\repositories\\data\\exercices.json';
+    const path = join(__dirname, 'data', 'exercices.json');
 
     const rawData = await this.io.read<any>({ path });
 
