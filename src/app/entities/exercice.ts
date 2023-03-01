@@ -15,9 +15,10 @@ export interface ExerciceProps {
   videos: ExerciceVideo;
 }
 
-export class Exercice extends BaseEntity {
-  constructor(private props: ExerciceProps, id?: string) {
+export class Exercice extends BaseEntity<ExerciceProps> {
+  constructor(props: ExerciceProps, id?: string) {
     super(id);
+    this.props = props;
   }
 
   public get name() {
@@ -66,9 +67,5 @@ export class Exercice extends BaseEntity {
 
   public set videos(videos: ExerciceVideo) {
     this.props.videos = videos;
-  }
-
-  toJSON() {
-    return { _id: this.id, ...this.props };
   }
 }
