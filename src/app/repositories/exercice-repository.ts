@@ -10,9 +10,9 @@ export interface SearchExercice extends Pageable {
 }
 
 export abstract class ExerciceRepository {
-  abstract findMany(params: Pageable): Promise<Page<Exercice>>;
+  abstract findMany(pageable: Pageable): Promise<Page<Exercice>>;
   abstract findByName(name: string): Promise<Exercice | null>;
-  abstract search(params: SearchExercice): Promise<Page<Exercice>>;
+  abstract search(pageable: SearchExercice): Promise<Page<Exercice>>;
   abstract create(exercice: Exercice): Promise<void>;
   abstract save(exercice: Exercice): Promise<boolean>;
 }
