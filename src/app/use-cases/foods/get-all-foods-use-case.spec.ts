@@ -1,4 +1,3 @@
-import { Exercice } from '@app/entities/exercice';
 import { Food } from '@app/entities/food';
 import { makeFood } from '@test/factories/food-factory';
 import { generateArray } from '@test/factories/generic-factory';
@@ -36,6 +35,6 @@ describe('GetAllFoods use case', () => {
     expect(foods.total).toEqual(TOTAL_ELEMENTS);
 
     expect(foods.data).toHaveLength(params.size);
-    expect(foods.data[0]).toBeInstanceOf(Exercice);
+    expect(foods.data[0]).toBeInstanceOf(Food);
   });
 });

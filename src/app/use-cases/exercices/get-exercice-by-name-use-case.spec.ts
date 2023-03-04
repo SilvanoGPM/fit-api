@@ -27,10 +27,10 @@ describe('GetExerciceByName use case', () => {
       initialExercice,
     ]);
 
-    const getExerciceById = new GetExerciceByNameUseCase(exerciceRepository);
+    const getExerciceByName = new GetExerciceByNameUseCase(exerciceRepository);
 
     expect(() => {
-      return getExerciceById.execute('random-name');
+      return getExerciceByName.execute('random-name');
     }).rejects.toThrow(NotFoundError);
   });
 });
