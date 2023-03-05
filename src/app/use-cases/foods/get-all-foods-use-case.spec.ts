@@ -1,7 +1,6 @@
 import { Food } from '@app/entities/food';
-import { makeFood } from '@test/factories/food-factory';
+import { makeFood, makeRepository } from '@test/factories/food-factory';
 import { generateArray } from '@test/factories/generic-factory';
-import { InMemoryFoodRepository } from '@test/repositories/in-memory-food-repository';
 
 import { GetAllFoodsUseCase } from './get-all-foods-use-case';
 
@@ -17,7 +16,7 @@ describe('GetAllFoods use case', () => {
       return new Food(props, id);
     }, TOTAL_ELEMENTS);
 
-    const foodRepository = new InMemoryFoodRepository(repositoryData);
+    const foodRepository = makeRepository(repositoryData);
 
     const getAllFoods = new GetAllFoodsUseCase(foodRepository);
 

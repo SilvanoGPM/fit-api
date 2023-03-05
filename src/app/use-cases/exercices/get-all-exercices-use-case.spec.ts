@@ -1,7 +1,9 @@
 import { Exercice } from '@app/entities/exercice';
-import { makeExercice } from '@test/factories/exercice-factory';
-import { generateArray } from '@test/factories/generic-factory';
-import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
+
+import {
+  generateExercices,
+  makeRepository,
+} from '@test/factories/exercice-factory';
 
 import { GetAllExercicesUseCase } from './get-all-exercices-use-case';
 
@@ -9,15 +11,13 @@ describe('GetAllExercices use case', () => {
   it('should be able to get all exercices with pagination', async () => {
     const TOTAL_ELEMENTS = 100;
 
-    const repositoryData = generateArray((i) => {
-      const id = String(i);
-
-      const props = makeExercice({ name: `Test Exercice #${i}` });
-
-      return new Exercice(props, id);
+    const repositoryData = generateExercices((i) => {
+      return {
+        name: `Test Exercice #${i}`,
+      };
     }, TOTAL_ELEMENTS);
 
-    const exerciceRepository = new InMemoryExerciceRepository(repositoryData);
+    const exerciceRepository = makeRepository(repositoryData);
 
     const getAllExercices = new GetAllExercicesUseCase(exerciceRepository);
 

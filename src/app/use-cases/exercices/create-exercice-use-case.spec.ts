@@ -1,11 +1,11 @@
 import { Exercice } from '@app/entities/exercice';
-import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
+import { makeRepository } from '@test/factories/exercice-factory';
 
 import { CreateExerciceUseCase } from './create-exercice-use-case';
 
 describe('CreateExercice use case', () => {
   it('should be able to create an exercice', async () => {
-    const exerciceRepository = new InMemoryExerciceRepository();
+    const exerciceRepository = makeRepository();
 
     const createExercice = new CreateExerciceUseCase(exerciceRepository);
 

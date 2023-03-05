@@ -1,6 +1,5 @@
 import { Exercice } from '@app/entities/exercice';
-import { makeExercice } from '@test/factories/exercice-factory';
-import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
+import { makeExercice, makeRepository } from '@test/factories/exercice-factory';
 
 import { ReplaceExerciceUseCase } from './replace-exercice-use-case';
 import { NotFoundError } from '../errors/not-found.error';
@@ -9,9 +8,7 @@ describe('ReplaceExercice use case', () => {
   it('should be able to replace an exercice', async () => {
     const initialExercice = makeExercice();
 
-    const exerciceRepository = new InMemoryExerciceRepository([
-      initialExercice,
-    ]);
+    const exerciceRepository = makeRepository([initialExercice]);
 
     const replaceExercice = new ReplaceExerciceUseCase(exerciceRepository);
 
@@ -39,11 +36,7 @@ describe('ReplaceExercice use case', () => {
   });
 
   it('should not be able to replace an exercice when it does not exists', async () => {
-    const initialExercice = makeExercice();
-
-    const exerciceRepository = new InMemoryExerciceRepository([
-      initialExercice,
-    ]);
+    const exerciceRepository = makeRepository();
 
     const replaceExercice = new ReplaceExerciceUseCase(exerciceRepository);
 
@@ -60,6 +53,7 @@ describe('ReplaceExercice use case', () => {
         female: ['test-female-video'],
       },
     };
+
     expect(() => {
       return replaceExercice.execute(params);
     }).rejects.toThrow(NotFoundError);

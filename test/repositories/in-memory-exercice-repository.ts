@@ -1,40 +1,28 @@
 import { Exercice } from '@app/entities/exercice';
 import type { Pageable, Page } from '@app/repositories/pages.type';
+import { RepositoryUtils } from '@test/utils/repository-utils';
 
 import type {
   ExerciceRepository,
   SearchExercice,
 } from '@app/repositories/exercice-repository';
 
-interface GetPageParams extends Pageable {
-  exercices: Exercice[];
-}
-
 export class InMemoryExerciceRepository implements ExerciceRepository {
-  constructor(public exercices: Exercice[] = []) {}
+  constructor(
+    public exercices: Exercice[] = [],
+    private utils: RepositoryUtils<Exercice>,
+  ) {}
 
   async findMany(params: Pageable) {
-    return this.getPage({ exercices: this.exercices, ...params });
+    return this.utils.getPage({ data: this.exercices, ...params });
   }
 
   async findByName(name: string) {
-    function findName(exercice: Exercice) {
-      const formattedExerciceName = exercice.name
-        .toLowerCase()
-        .replace('-', ' ');
-
-      const formattedName = name.toLowerCase().replace('-', ' ');
-
-      return formattedExerciceName === formattedName;
-    }
-
-    const exercice = this.exercices.find(findName);
-
-    if (!exercice) {
-      return null;
-    }
-
-    return exercice;
+    return this.utils.findByString({
+      data: this.exercices,
+      property: 'name',
+      search: name,
+    });
   }
 
   async search({
@@ -44,15 +32,7 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     name,
     ...params
   }: SearchExercice): Promise<Page<Exercice>> {
-    function like(first: string, second?: string) {
-      if (second === undefined || second === '') {
-        return true;
-      }
-
-      return first.toLowerCase().includes(second.toLowerCase());
-    }
-
-    function getExercices(exercices: Exercice[]) {
+    const getExercices = (exercices: Exercice[]) => {
       const allParamsUndefined = [mode, muscle, name].every(
         (param) => param === undefined,
       );
@@ -62,18 +42,21 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
       }
 
       return exercices.filter((exercice) => {
-        const hasName = like(exercice.name, name);
-        const hasMuscle = like(exercice.muscle, muscle);
-        const hasDifficulty = like(exercice.difficulty, difficulty);
-        const hasMode = like(exercice.mode, mode);
+        const hasName = this.utils.like(exercice.name, name);
+        const hasMuscle = this.utils.like(exercice.muscle, muscle);
+        const hasDifficulty = this.utils.like(exercice.difficulty, difficulty);
+        const hasMode = this.utils.like(exercice.mode, mode);
 
         const shouldPass = hasName && hasMuscle && hasDifficulty && hasMode;
 
         return shouldPass;
       });
-    }
+    };
 
-    return this.getPage({ exercices: getExercices(this.exercices), ...params });
+    return this.utils.getPage({
+      data: getExercices(this.exercices),
+      ...params,
+    });
   }
 
   async create(exercice: Exercice) {
@@ -92,24 +75,5 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     }
 
     return exists;
-  }
-
-  private getPage({ exercices, page, size }: GetPageParams) {
-    const start = size * (page - 1);
-    const end = start + size;
-
-    const total = exercices.length;
-
-    const data = exercices.slice(start, end);
-
-    const hasNext = Boolean(exercices[end]);
-
-    return {
-      data,
-      page,
-      size,
-      total,
-      hasNext,
-    };
   }
 }

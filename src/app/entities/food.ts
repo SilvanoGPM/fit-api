@@ -10,7 +10,7 @@ interface Energy {
   kj: number;
 }
 
-interface FoodProps {
+export interface FoodProps {
   name: string;
   baseQuantity: number;
   baseUnit: string;

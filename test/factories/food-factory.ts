@@ -1,6 +1,9 @@
-import { Food } from '@app/entities/food';
+import { Food, FoodProps } from '@app/entities/food';
+import { InMemoryFoodRepository } from '@test/repositories/in-memory-food-repository';
+import { RepositoryUtils } from '@test/utils/repository-utils';
+import { generateArray } from './generic-factory';
 
-export function makeFood(food: Partial<Food> = {}, id?: string) {
+export function makeFood(food: Partial<FoodProps> = {}, id?: string) {
   return new Food(
     {
       name: food.name ?? 'test-name',
@@ -35,4 +38,23 @@ export function makeFood(food: Partial<Food> = {}, id?: string) {
     },
     id,
   );
+}
+
+export function generateExercices(
+  map: (i: number) => Partial<FoodProps>,
+  total = 100,
+) {
+  return generateArray((i) => {
+    const id = String(i);
+
+    const props = map(i);
+
+    return makeFood(props, id);
+  }, total);
+}
+
+export function makeRepository(foods: Food[] = []) {
+  const utils = new RepositoryUtils<Food>();
+
+  return new InMemoryFoodRepository(foods, utils);
 }
