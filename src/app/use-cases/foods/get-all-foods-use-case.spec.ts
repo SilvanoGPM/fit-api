@@ -1,6 +1,6 @@
 import { Food } from '@app/entities/food';
-import { makeFood, makeRepository } from '@test/factories/food-factory';
-import { generateArray } from '@test/factories/generic-factory';
+
+import { generateFoods, makeRepository } from '@test/factories/food-factory';
 
 import { GetAllFoodsUseCase } from './get-all-foods-use-case';
 
@@ -8,13 +8,7 @@ describe('GetAllFoods use case', () => {
   it('should be able to get all foods with pagination', async () => {
     const TOTAL_ELEMENTS = 100;
 
-    const repositoryData = generateArray((i) => {
-      const id = String(i);
-
-      const props = makeFood({ name: `Test Food #${i}` });
-
-      return new Food(props, id);
-    }, TOTAL_ELEMENTS);
+    const repositoryData = generateFoods(TOTAL_ELEMENTS);
 
     const foodRepository = makeRepository(repositoryData);
 

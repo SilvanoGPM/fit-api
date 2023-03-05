@@ -12,6 +12,12 @@ interface FindByString<T> {
   search: string;
 }
 
+interface RangeParams {
+  value: number;
+  min?: number;
+  max?: number;
+}
+
 @Injectable()
 export class RepositoryUtils<T> {
   public findByString({ data, property, search }: FindByString<T>) {
@@ -44,6 +50,13 @@ export class RepositoryUtils<T> {
     }
 
     return first.toLowerCase().includes(second.toLowerCase());
+  }
+
+  public range({ value, min = 0, max }: RangeParams) {
+    const isMin = value >= min;
+    const isMax = max ? value <= max : true;
+
+    return isMin && isMax;
   }
 
   public getPage({ data: rawData, page, size }: GetPageParams<T>) {

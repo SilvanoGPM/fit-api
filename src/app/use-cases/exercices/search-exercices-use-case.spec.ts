@@ -8,14 +8,10 @@ import {
 import { SearchExercicesUseCase } from './search-exercices-use-case';
 
 describe('SearchExercices use case', () => {
-  it('should be able to search all exercices with pagination when params not send', async () => {
+  it('should be able to search all exercices with pagination when search not send', async () => {
     const TOTAL_ELEMENTS = 100;
 
-    const repositoryData = generateExercices((i) => {
-      return {
-        name: `Test Exercice #${i}`,
-      };
-    }, TOTAL_ELEMENTS);
+    const repositoryData = generateExercices(TOTAL_ELEMENTS);
 
     const exerciceRepository = makeRepository(repositoryData);
 
@@ -41,11 +37,7 @@ describe('SearchExercices use case', () => {
   it('should be able to search exercices with pagination', async () => {
     const TOTAL_OF_EXERCICES_WITH_TEN_ON_NAME = 2;
 
-    const repositoryData = generateExercices((i) => {
-      return {
-        name: `Test Exercice #${i}`,
-      };
-    });
+    const repositoryData = generateExercices();
 
     const exerciceRepository = makeRepository(repositoryData);
 

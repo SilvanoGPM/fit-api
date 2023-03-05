@@ -40,9 +40,15 @@ export function makeFood(food: Partial<FoodProps> = {}, id?: string) {
   );
 }
 
-export function generateExercices(
-  map: (i: number) => Partial<FoodProps>,
+const defaultMap = (i) => {
+  return {
+    name: `Test Exercice #${i}`,
+  };
+};
+
+export function generateFoods(
   total = 100,
+  map: (i: number) => Partial<FoodProps> = defaultMap,
 ) {
   return generateArray((i) => {
     const id = String(i);

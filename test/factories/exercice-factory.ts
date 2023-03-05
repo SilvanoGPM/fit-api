@@ -23,9 +23,15 @@ export function makeExercice(
   );
 }
 
+const defaultMap = (i) => {
+  return {
+    name: `Test Exercice #${i}`,
+  };
+};
+
 export function generateExercices(
-  map: (i: number) => Partial<ExerciceProps>,
   total = 100,
+  map: (i: number) => Partial<ExerciceProps> = defaultMap,
 ) {
   return generateArray((i) => {
     const id = String(i);

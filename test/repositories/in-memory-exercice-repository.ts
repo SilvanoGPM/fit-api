@@ -33,7 +33,7 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     ...params
   }: SearchExercice): Promise<Page<Exercice>> {
     const getExercices = (exercices: Exercice[]) => {
-      const allParamsUndefined = [mode, muscle, name].every(
+      const allParamsUndefined = [mode, muscle, name, difficulty].every(
         (param) => param === undefined,
       );
 

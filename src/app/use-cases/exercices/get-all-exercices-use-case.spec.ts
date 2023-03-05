@@ -11,11 +11,7 @@ describe('GetAllExercices use case', () => {
   it('should be able to get all exercices with pagination', async () => {
     const TOTAL_ELEMENTS = 100;
 
-    const repositoryData = generateExercices((i) => {
-      return {
-        name: `Test Exercice #${i}`,
-      };
-    }, TOTAL_ELEMENTS);
+    const repositoryData = generateExercices(TOTAL_ELEMENTS);
 
     const exerciceRepository = makeRepository(repositoryData);
 
