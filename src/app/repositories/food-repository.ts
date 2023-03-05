@@ -22,4 +22,5 @@ export abstract class FoodRepository {
   abstract search(pageable: SearchFoods): Promise<Page<Food>>;
   abstract findByName(name: string): Promise<Food | null>;
   abstract create(food: Food): Promise<void>;
+  abstract save(food: Food): Promise<boolean>;
 }

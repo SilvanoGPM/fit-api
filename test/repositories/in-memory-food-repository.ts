@@ -105,4 +105,16 @@ export class InMemoryFoodRepository implements FoodRepository {
   async create(food: Food) {
     this.foods.push(food);
   }
+
+  async save(food: Food) {
+    const index = this.foods.findIndex((innerFood) => innerFood.id === food.id);
+
+    const exists = index >= 0;
+
+    if (exists) {
+      this.foods[index] = food;
+    }
+
+    return exists;
+  }
 }
