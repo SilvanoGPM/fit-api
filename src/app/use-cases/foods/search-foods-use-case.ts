@@ -1,8 +1,11 @@
+import { Injectable } from '@nestjs/common';
+
 import type { SearchFoods } from '@app/repositories/food-repository';
 import { FoodRepository } from '@app/repositories/food-repository';
 
 type ExecuteParams = SearchFoods;
 
+@Injectable()
 export class SearchFoodsUseCase {
   constructor(private foodRepository: FoodRepository) {}
 

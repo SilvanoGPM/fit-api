@@ -101,4 +101,8 @@ export class InMemoryFoodRepository implements FoodRepository {
 
     return this.utils.getPage({ data: getFoods(this.foods), ...pageable });
   }
+
+  async create(food: Food) {
+    this.foods.push(food);
+  }
 }
