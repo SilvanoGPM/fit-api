@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { FoodRepository } from '@app/repositories/food-repository';
 
 import type { Pageable } from '@app/repositories/pages.type';
-import type { FoodRepository } from '@app/repositories/food-repository';
 
 type ExecuteParams = Pageable;
 

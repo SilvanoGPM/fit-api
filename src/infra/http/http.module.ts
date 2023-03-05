@@ -9,17 +9,30 @@ import { SearchExercicesUseCase } from '@app/use-cases/exercices/search-exercice
 
 import { ExerciceController } from './controllers/exercice.controller';
 import { GenericService } from './services/generic.service';
+import { CreateFoodUseCase } from '@app/use-cases/foods/create-food-use-case';
+import { GetAllFoodsUseCase } from '@app/use-cases/foods/get-all-foods-use-case';
+import { GetFoodByNameUseCase } from '@app/use-cases/foods/get-food-by-name-use-case';
+import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
+import { SearchFoodsUseCase } from '@app/use-cases/foods/search-foods-use-case';
+import { FoodController } from './controllers/food.controller';
 
 @Module({
   imports: [StaticModule],
-  controllers: [ExerciceController],
+  controllers: [ExerciceController, FoodController],
   providers: [
+    GenericService,
+
     CreateExerciceUseCase,
     GetAllExercicesUseCase,
     GetExerciceByNameUseCase,
     ReplaceExerciceUseCase,
     SearchExercicesUseCase,
-    GenericService,
+
+    GetAllFoodsUseCase,
+    CreateFoodUseCase,
+    GetFoodByNameUseCase,
+    ReplaceFoodUseCase,
+    SearchFoodsUseCase,
   ],
 })
 export class HttpModule {}

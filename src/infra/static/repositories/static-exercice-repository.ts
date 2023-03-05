@@ -5,9 +5,9 @@ import { Exercice } from '@app/entities/exercice';
 
 import { IoService } from '../io.service';
 import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
+import { RepositoryUtils } from '@test/utils/repository-utils';
 
 import './data/exercices.json';
-import { RepositoryUtils } from '@test/utils/repository-utils';
 
 @Injectable()
 export class StaticExerciceRepository extends InMemoryExerciceRepository {

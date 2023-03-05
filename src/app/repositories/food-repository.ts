@@ -8,7 +8,6 @@ export interface Range {
 
 export interface SearchFoods extends Pageable {
   name?: string;
-  baseQuantity?: Range;
   category?: string;
   protein?: Range;
   carbohydrate?: Range;

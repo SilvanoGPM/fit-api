@@ -1,5 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { Pageable } from '@app/repositories/pages.type';
-import { Injectable, BadRequestException } from '@nestjs/common';
+
+import { OnlyNumbersError } from '../errors/only-numbers.error';
 
 @Injectable()
 export class GenericService {
@@ -11,12 +14,19 @@ export class GenericService {
     const size = rawSize ? Number(rawSize) : DEFAULT_SIZE;
 
     if (isNaN(page) || isNaN(size)) {
-      throw new BadRequestException('Page or size is invalid!', {
-        cause: new Error(),
-        description: 'Only numerical values ​​are accepted',
-      });
+      throw new OnlyNumbersError('Page or size is invalid!');
     }
 
     return { page, size };
+  }
+
+  public formatRange(range = '') {
+    const [min, max] = range.split(', ');
+
+    if (isNaN(Number(min))) {
+      throw new OnlyNumbersError('Min value is invalid!');
+    }
+
+    return { min: Number(min), max: max ? Number(max) : undefined };
   }
 }

@@ -1,9 +1,11 @@
 import type { Food } from '@app/entities/food';
 import type { Pageable } from '@app/repositories/pages.type';
+
 import type {
   FoodRepository,
   SearchFoods,
 } from '@app/repositories/food-repository';
+
 import { RepositoryUtils } from '@test/utils/repository-utils';
 
 export class InMemoryFoodRepository implements FoodRepository {
@@ -27,7 +29,6 @@ export class InMemoryFoodRepository implements FoodRepository {
   async search({
     name,
     category,
-    baseQuantity,
     carbohydrate,
     energy,
     fiber,
@@ -38,7 +39,6 @@ export class InMemoryFoodRepository implements FoodRepository {
     const getFoods = (foods: Food[]) => {
       const allParamsUndefined = [
         name,
-        baseQuantity,
         carbohydrate,
         category,
         energy,
@@ -54,11 +54,6 @@ export class InMemoryFoodRepository implements FoodRepository {
       return foods.filter((food) => {
         const hasName = this.utils.like(food.name, name);
         const hasCategory = this.utils.like(food.category, category);
-
-        const hasBaseQuantity = this.utils.range({
-          value: food.baseQuantity,
-          ...baseQuantity,
-        });
 
         const hasCarbohydrate = this.utils.range({
           value: food.carbohydrate.quantity,
@@ -88,7 +83,6 @@ export class InMemoryFoodRepository implements FoodRepository {
         const shouldPass =
           hasName &&
           hasCategory &&
-          hasBaseQuantity &&
           hasCarbohydrate &&
           hasProtein &&
           hasLipid &&
