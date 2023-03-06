@@ -21,35 +21,8 @@ export class CreateFoodUseCase {
     const categories = await this.foodRepository.getCategories();
 
     const food = new Food({
-      name: props.name,
+      ...props,
       category: props.categoryId ? categories[props.categoryId] : 'Outros',
-      baseQuantity: 100,
-      baseUnit: 'g',
-
-      energy: {
-        kcal: props.energy,
-        kj: props.energy / 0.2390057,
-      },
-
-      carbohydrate: {
-        quantity: props.carbohydrate,
-        unit: 'g',
-      },
-
-      protein: {
-        quantity: props.protein,
-        unit: 'g',
-      },
-
-      lipid: {
-        quantity: props.lipid,
-        unit: 'g',
-      },
-
-      fiber: {
-        quantity: props.fiber,
-        unit: 'g',
-      },
     });
 
     await this.foodRepository.create(food);

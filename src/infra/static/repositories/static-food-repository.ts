@@ -34,14 +34,12 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
       const food = new Food(
         {
           name: rawFood.description,
-          baseQuantity: rawFood.base_qty,
-          baseUnit: rawFood.base_unit,
           category: this.categories[rawFood.category_id],
           protein: this.mapMacro(rawFood.attributes.protein),
           carbohydrate: this.mapMacro(rawFood.attributes.carbohydrate),
           lipid: this.mapMacro(rawFood.attributes.lipid),
           fiber: this.mapMacro(rawFood.attributes.fiber),
-          energy: rawFood.attributes.energy,
+          energy: rawFood.attributes.energy.kcal,
         },
         String(rawFood.id),
       );
@@ -61,10 +59,6 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
   }
 
   private mapMacro(macro: RawMacro) {
-    if (!macro) {
-      return { quantity: 0, unit: 'g' };
-    }
-
-    return { quantity: macro.qty, unit: macro.unit };
+    return macro ? macro.qty : 0;
   }
 }

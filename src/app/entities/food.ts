@@ -22,10 +22,51 @@ export interface FoodProps {
   energy: Energy;
 }
 
+export interface CreateFoodProps {
+  name: string;
+  category: string;
+  protein: number;
+  carbohydrate: number;
+  lipid: number;
+  fiber: number;
+  energy: number;
+}
+
 export class Food extends BaseEntity<FoodProps> {
-  constructor(props: FoodProps, id?: string) {
+  constructor(props: CreateFoodProps, id?: string) {
     super(id);
-    this.props = props;
+
+    this.props = {
+      name: props.name,
+      category: props.category,
+      baseQuantity: 100,
+      baseUnit: 'g',
+
+      energy: {
+        kcal: props.energy,
+        kj: props.energy / 0.2390057,
+      },
+
+      carbohydrate: {
+        quantity: props.carbohydrate,
+        unit: 'g',
+      },
+
+      protein: {
+        quantity: props.protein,
+        unit: 'g',
+      },
+
+      lipid: {
+        quantity: props.lipid,
+        unit: 'g',
+      },
+
+      fiber: {
+        quantity: props.fiber,
+        unit: 'g',
+      },
+    };
   }
 
   public get name() {

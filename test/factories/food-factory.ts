@@ -1,40 +1,18 @@
-import { Food, FoodProps } from '@app/entities/food';
+import { CreateFoodProps, Food } from '@app/entities/food';
 import { InMemoryFoodRepository } from '@test/repositories/in-memory-food-repository';
 import { RepositoryUtils } from '@test/utils/repository-utils';
 import { generateArray } from './generic-factory';
 
-export function makeFood(food: Partial<FoodProps> = {}, id?: string) {
+export function makeFood(food: Partial<CreateFoodProps> = {}, id?: string) {
   return new Food(
     {
       name: food.name ?? 'test-name',
-      baseQuantity: food.baseQuantity ?? 100,
-      baseUnit: food.baseUnit ?? 'test-unit',
       category: food.category ?? 'test-category',
-
-      energy: food.energy ?? {
-        kcal: 100,
-        kj: 100,
-      },
-
-      carbohydrate: food.carbohydrate ?? {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      lipid: food.lipid ?? {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      fiber: food.fiber ?? {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      protein: food.protein ?? {
-        quantity: 100,
-        unit: 'test-unit',
-      },
+      energy: food.energy ?? 100,
+      carbohydrate: food.carbohydrate ?? 100,
+      lipid: food.lipid ?? 100,
+      fiber: food.fiber ?? 100,
+      protein: food.protein ?? 100,
     },
     id,
   );
@@ -48,7 +26,7 @@ const defaultMap = (i) => {
 
 export function generateFoods(
   total = 100,
-  map: (i: number) => Partial<FoodProps> = defaultMap,
+  map: (i: number) => Partial<CreateFoodProps> = defaultMap,
 ) {
   return generateArray((i) => {
     const id = String(i);
