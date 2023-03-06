@@ -12,6 +12,7 @@ export class InMemoryFoodRepository implements FoodRepository {
   constructor(
     public foods: Food[] = [],
     private utils: RepositoryUtils<Food>,
+    public categories: Record<number, string> = {},
   ) {}
 
   async findMany(params: Pageable) {
@@ -110,5 +111,9 @@ export class InMemoryFoodRepository implements FoodRepository {
     }
 
     return exists;
+  }
+
+  public async getCategories() {
+    return this.categories;
   }
 }

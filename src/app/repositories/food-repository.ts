@@ -22,4 +22,6 @@ export abstract class FoodRepository {
   abstract findByName(name: string): Promise<Food | null>;
   abstract create(food: Food): Promise<void>;
   abstract save(food: Food): Promise<boolean>;
+
+  abstract getCategories(): Promise<Record<number, string>>;
 }

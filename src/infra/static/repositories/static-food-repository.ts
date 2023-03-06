@@ -7,18 +7,13 @@ import { InMemoryFoodRepository } from '@test/repositories/in-memory-food-reposi
 import { RepositoryUtils } from '@test/utils/repository-utils';
 import { Food } from '@app/entities/food';
 
-import './data/foods.json';
-import './data/categories.json';
-
-interface Category {
-  id: number;
-  name: string;
-}
-
 interface RawMacro {
   qty: number;
   unit: string;
 }
+
+import './data/foods.json';
+import './data/categories.json';
 
 @Injectable()
 export class StaticFoodRepository extends InMemoryFoodRepository {
@@ -29,7 +24,7 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
   }
 
   private async loadData() {
-    const categories = await this.getCategories();
+    await this.loadCategories();
 
     const path = join(__dirname, 'data', 'foods.json');
 
@@ -41,8 +36,7 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
           name: rawFood.description,
           baseQuantity: rawFood.base_qty,
           baseUnit: rawFood.base_unit,
-          category:
-            categories.find(({ id }) => rawFood.category_id === id)?.name || '',
+          category: this.categories[rawFood.category_id],
           protein: this.mapMacro(rawFood.attributes.protein),
           carbohydrate: this.mapMacro(rawFood.attributes.carbohydrate),
           lipid: this.mapMacro(rawFood.attributes.lipid),
@@ -56,17 +50,14 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
     }
   }
 
-  private async getCategories() {
+  private async loadCategories() {
     const path = join(__dirname, 'data', 'categories.json');
 
     const rawCategories = await this.io.read<any>({ path });
 
-    return rawCategories.map(
-      ({ id, category }: { id: number; category: string }) => ({
-        id,
-        name: category,
-      }),
-    ) as Category[];
+    for (const rawCategory of rawCategories) {
+      this.categories[rawCategory.id] = rawCategory.category;
+    }
   }
 
   private mapMacro(macro: RawMacro) {

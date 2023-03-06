@@ -11,34 +11,11 @@ describe('CreateFood use case', () => {
 
     const params = {
       name: 'test-name',
-      baseQuantity: 100,
-      baseUnit: 'test-unit',
-      category: 'test-category',
-
-      energy: {
-        kcal: 100,
-        kj: 100,
-      },
-
-      carbohydrate: {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      lipid: {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      fiber: {
-        quantity: 100,
-        unit: 'test-unit',
-      },
-
-      protein: {
-        quantity: 100,
-        unit: 'test-unit',
-      },
+      energy: 100,
+      carbohydrate: 100,
+      lipid: 100,
+      fiber: 100,
+      protein: 100,
     };
 
     const { food } = await createFood.execute(params);

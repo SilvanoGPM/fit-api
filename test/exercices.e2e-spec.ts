@@ -8,6 +8,7 @@ import { Exercice } from '@app/entities/exercice';
 import { AppModule } from '../src/app.module';
 import { makeExercice } from './factories/exercice-factory';
 import { InMemoryExerciceRepository } from './repositories/in-memory-exercice-repository';
+import { RepositoryUtils } from './utils/repository-utils';
 
 function expectExercice({
   id,
@@ -38,7 +39,13 @@ function expectExercice({
 
 describe('ExerciceController (e2e)', () => {
   let app: INestApplication;
-  const exerciceRepository = new InMemoryExerciceRepository([makeExercice()]);
+
+  const repositoryUtils = new RepositoryUtils<Exercice>();
+
+  const exerciceRepository = new InMemoryExerciceRepository(
+    [makeExercice()],
+    repositoryUtils,
+  );
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
