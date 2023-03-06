@@ -37,8 +37,11 @@ export function generateFoods(
   }, total);
 }
 
-export function makeRepository(foods: Food[] = []) {
+export function makeRepository(
+  foods: Food[] = [],
+  categories: Record<number, string> = {},
+) {
   const utils = new RepositoryUtils<Food>();
 
-  return new InMemoryFoodRepository(foods, utils);
+  return new InMemoryFoodRepository(foods, utils, categories);
 }

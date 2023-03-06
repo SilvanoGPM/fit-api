@@ -14,6 +14,7 @@ import { FoodNotFoundError } from '../errors/food-not-found.error';
 import { CreateFoodDTO } from '../dtos/foods/create-food.dto';
 import { ReplaceFoodDTO } from '../dtos/foods/replace-food.dto';
 import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
+import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
 
 type RawSearchFoods = Replace<
   SearchFoods,
@@ -30,6 +31,7 @@ type RawSearchFoods = Replace<
 export class FoodController {
   constructor(
     private getAllFoods: GetAllFoodsUseCase,
+    private getAllCategories: GetAllCategoriesUseCase,
     private searchFoods: SearchFoodsUseCase,
     private getFoodByName: GetFoodByNameUseCase,
     private createFood: CreateFoodUseCase,
@@ -44,6 +46,13 @@ export class FoodController {
     const { foods } = await this.getAllFoods.execute(params);
 
     return foods;
+  }
+
+  @Get('categories')
+  async _getAllCategories() {
+    const { categories } = await this.getAllCategories.execute();
+
+    return categories;
   }
 
   @Get('search')
