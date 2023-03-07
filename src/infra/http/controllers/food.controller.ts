@@ -3,18 +3,18 @@ import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { GetAllFoodsUseCase } from '@app/use-cases/foods/get-all-foods-use-case';
 import { GetFoodByNameUseCase } from '@app/use-cases/foods/get-food-by-name-use-case';
 import { Pageable } from '@app/repositories/pages.type';
-
 import { SearchFoods } from '@app/repositories/food-repository';
 import { SearchFoodsUseCase } from '@app/use-cases/foods/search-foods-use-case';
 import { Replace } from '@helpers/replace';
 import { CreateFoodUseCase } from '@app/use-cases/foods/create-food-use-case';
+import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
+import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
+import { GetFoodByIdUseCase } from '@app/use-cases/foods/get-food-by-id-use-case';
 
 import { GenericService } from '../services/generic.service';
 import { FoodNotFoundError } from '../errors/food-not-found.error';
 import { CreateFoodDTO } from '../dtos/foods/create-food.dto';
 import { ReplaceFoodDTO } from '../dtos/foods/replace-food.dto';
-import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
-import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
 
 type RawSearchFoods = Replace<
   SearchFoods,
@@ -34,6 +34,7 @@ export class FoodController {
     private getAllCategories: GetAllCategoriesUseCase,
     private searchFoods: SearchFoodsUseCase,
     private getFoodByName: GetFoodByNameUseCase,
+    private getFoodById: GetFoodByIdUseCase,
     private createFood: CreateFoodUseCase,
     private replaceFood: ReplaceFoodUseCase,
     private genericService: GenericService,
@@ -77,10 +78,21 @@ export class FoodController {
     return foods;
   }
 
-  @Get(':name')
+  @Get(':name/name')
   async findByName(@Param('name') name: string) {
     try {
       const { food } = await this.getFoodByName.execute(name);
+
+      return { food };
+    } catch (error) {
+      throw new FoodNotFoundError(error);
+    }
+  }
+
+  @Get(':id/id')
+  async findById(@Param('id') id: string) {
+    try {
+      const { food } = await this.getFoodById.execute(id);
 
       return { food };
     } catch (error) {

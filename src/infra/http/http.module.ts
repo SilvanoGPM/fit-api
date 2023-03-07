@@ -9,6 +9,7 @@ import { SearchExercicesUseCase } from '@app/use-cases/exercices/search-exercice
 import { CreateFoodUseCase } from '@app/use-cases/foods/create-food-use-case';
 import { GetAllFoodsUseCase } from '@app/use-cases/foods/get-all-foods-use-case';
 import { GetFoodByNameUseCase } from '@app/use-cases/foods/get-food-by-name-use-case';
+import { GetFoodByIdUseCase } from '@app/use-cases/foods/get-food-by-id-use-case';
 import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
 import { SearchFoodsUseCase } from '@app/use-cases/foods/search-foods-use-case';
 import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
@@ -31,8 +32,9 @@ import { FoodController } from './controllers/food.controller';
 
     GetAllFoodsUseCase,
     GetAllCategoriesUseCase,
-    CreateFoodUseCase,
     GetFoodByNameUseCase,
+    GetFoodByIdUseCase,
+    CreateFoodUseCase,
     ReplaceFoodUseCase,
     SearchFoodsUseCase,
   ],

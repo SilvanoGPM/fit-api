@@ -20,6 +20,7 @@ export abstract class FoodRepository {
   abstract findMany(pageable: Pageable): Promise<Page<Food>>;
   abstract search(pageable: SearchFoods): Promise<Page<Food>>;
   abstract findByName(name: string): Promise<Food | null>;
+  abstract findById(id: string): Promise<Food | null>;
   abstract create(food: Food): Promise<void>;
   abstract save(food: Food): Promise<boolean>;
 
