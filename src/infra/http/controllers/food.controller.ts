@@ -1,4 +1,22 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+
+import {
+  ApiTags,
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 
 import { GetAllFoodsUseCase } from '@app/use-cases/foods/get-all-foods-use-case';
 import { GetFoodByNameUseCase } from '@app/use-cases/foods/get-food-by-name-use-case';
@@ -27,6 +45,7 @@ type RawSearchFoods = Replace<
   }
 >;
 
+@ApiTags('Comidas')
 @Controller('foods')
 export class FoodController {
   constructor(
@@ -41,6 +60,8 @@ export class FoodController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'Retorna todos as comidas com paginação.' })
+  @ApiOkResponse({ description: 'Comidas encontradas com sucesso' })
   async getAll(@Query() query: Pageable) {
     const params = this.genericService.getPageParamsByQuery(query);
 
@@ -50,6 +71,8 @@ export class FoodController {
   }
 
   @Get('categories')
+  @ApiOperation({ summary: 'Retorna todas as categorias.' })
+  @ApiOkResponse({ description: 'Categorias encontradas com sucesso' })
   async _getAllCategories() {
     const { categories } = await this.getAllCategories.execute();
 
@@ -57,6 +80,8 @@ export class FoodController {
   }
 
   @Get('search')
+  @ApiOperation({ summary: 'Pesquisa comidas com paginação.' })
+  @ApiOkResponse({ description: 'Comidas encontradas com sucesso' })
   async search(
     @Query() { page, size, name, category, ...rawRanges }: RawSearchFoods,
   ) {
@@ -79,6 +104,9 @@ export class FoodController {
   }
 
   @Get(':name/name')
+  @ApiOperation({ summary: 'Retorna uma comida pelo nome.' })
+  @ApiOkResponse({ description: 'Comida encontrada com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })
   async findByName(@Param('name') name: string) {
     try {
       const { food } = await this.getFoodByName.execute(name);
@@ -90,6 +118,9 @@ export class FoodController {
   }
 
   @Get(':id/id')
+  @ApiOperation({ summary: 'Retorna uma comida pelo identificador.' })
+  @ApiOkResponse({ description: 'Comida encontrada com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })
   async findById(@Param('id') id: string) {
     try {
       const { food } = await this.getFoodById.execute(id);
@@ -101,6 +132,12 @@ export class FoodController {
   }
 
   @Post()
+  @HttpCode(201)
+  @ApiOperation({ summary: 'Persiste uma nova comida.' })
+  @ApiCreatedResponse({ description: 'Comida foi criada com sucesso' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na criação da comida',
+  })
   async create(@Body() createFoodDto: CreateFoodDTO) {
     const { name, categoryId, energy, carbohydrate, fiber, lipid, protein } =
       createFoodDto;
@@ -119,6 +156,12 @@ export class FoodController {
   }
 
   @Put()
+  @ApiOperation({ summary: 'Atualiza uma comida.' })
+  @ApiOkResponse({ description: 'Comida atualizada com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na atualiza da comida',
+  })
   async replace(@Body() replaceFoodDto: ReplaceFoodDTO) {
     const {
       id,

@@ -15,6 +15,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 
 import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
@@ -30,7 +31,7 @@ import { CreateExerciceDTO } from '../dtos/exercices/create-exercice.dto';
 import { ReplaceExerciceDTO } from '../dtos/exercices/replace-exercice.dto';
 import { ExerciceNotFoundError } from '../errors/exercice-not-found.error';
 
-@ApiTags('Exercices')
+@ApiTags('Exercícios')
 @Controller('exercices')
 export class ExerciceController {
   constructor(
@@ -91,6 +92,9 @@ export class ExerciceController {
   @HttpCode(201)
   @ApiOperation({ summary: 'Persiste um novo exercício.' })
   @ApiCreatedResponse({ description: 'Exercício foi criado com sucesso' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na criação do exercício',
+  })
   async create(@Body() createExerciceDto: CreateExerciceDTO) {
     const { name, mode, muscle, difficulty, steps, videos } = createExerciceDto;
 
@@ -107,9 +111,12 @@ export class ExerciceController {
   }
 
   @Put()
-  @ApiOperation({ summary: 'Atualiza um exercício' })
+  @ApiOperation({ summary: 'Atualiza um exercício.' })
   @ApiOkResponse({ description: 'Exercício atualizado com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhum exercício encontrado' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na atualização do exercício',
+  })
   async replace(@Body() replaceExerciceDto: ReplaceExerciceDTO) {
     const { id, name, mode, muscle, difficulty, steps, videos } =
       replaceExerciceDto;
