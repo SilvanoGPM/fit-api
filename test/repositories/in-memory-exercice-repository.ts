@@ -17,12 +17,16 @@ export class InMemoryExerciceRepository implements ExerciceRepository {
     return this.utils.getPage({ data: this.exercices, ...params });
   }
 
-  async findByName(name: string) {
-    return this.utils.findByString({
-      data: this.exercices,
-      property: 'name',
-      search: name,
-    });
+  async findById(id: string) {
+    const exercice = this.exercices.find(
+      (innerExercice) => innerExercice.id === id,
+    );
+
+    if (!exercice) {
+      return null;
+    }
+
+    return exercice;
   }
 
   async search({

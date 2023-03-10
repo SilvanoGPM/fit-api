@@ -35,7 +35,7 @@ export class PrismaExerciceRepository implements ExerciceRepository {
     return this.getPage({ page, size });
   }
 
-  async findByName(id: string) {
+  async findById(id: string) {
     const rawExercice = await this.prisma.exercice.findUnique({
       where: { id },
       include: globalInclude,
@@ -85,7 +85,7 @@ export class PrismaExerciceRepository implements ExerciceRepository {
   async save(exercice: Exercice) {
     const data = PrismaMapper.toPrisma(exercice);
 
-    const exists = await this.findByName(exercice.id);
+    const exists = await this.findById(exercice.id);
 
     if (!exists) {
       return false;

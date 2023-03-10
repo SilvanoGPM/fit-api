@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
 import { GetAllExercicesUseCase } from '@app/use-cases/exercices/get-all-exercices-use-case';
-import { GetExerciceByNameUseCase } from '@app/use-cases/exercices/get-exercice-by-name-use-case';
+import { GetExerciceByIdUseCase } from '@app/use-cases/exercices/get-exercice-by-id-use-case';
 import { ReplaceExerciceUseCase } from '@app/use-cases/exercices/replace-exercice-use-case';
 import { SearchExercicesUseCase } from '@app/use-cases/exercices/search-exercices-use-case';
 import { CreateFoodUseCase } from '@app/use-cases/foods/create-food-use-case';
@@ -26,7 +26,7 @@ import { DatabaseModule } from '@infra/database/database.module';
 
     CreateExerciceUseCase,
     GetAllExercicesUseCase,
-    GetExerciceByNameUseCase,
+    GetExerciceByIdUseCase,
     ReplaceExerciceUseCase,
     SearchExercicesUseCase,
 
