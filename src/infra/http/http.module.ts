@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { StaticModule } from '@infra/static/static.module';
 import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
 import { GetAllExercicesUseCase } from '@app/use-cases/exercices/get-all-exercices-use-case';
 import { GetExerciceByNameUseCase } from '@app/use-cases/exercices/get-exercice-by-name-use-case';
@@ -17,10 +16,11 @@ import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories
 import { ExerciceController } from './controllers/exercice.controller';
 import { GenericService } from './services/generic.service';
 import { FoodController } from './controllers/food.controller';
+import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
-  imports: [StaticModule],
-  controllers: [ExerciceController, FoodController],
+  imports: [DatabaseModule],
+  controllers: [ExerciceController],
   providers: [
     GenericService,
 
@@ -30,13 +30,13 @@ import { FoodController } from './controllers/food.controller';
     ReplaceExerciceUseCase,
     SearchExercicesUseCase,
 
-    GetAllFoodsUseCase,
-    GetAllCategoriesUseCase,
-    GetFoodByNameUseCase,
-    GetFoodByIdUseCase,
-    CreateFoodUseCase,
-    ReplaceFoodUseCase,
-    SearchFoodsUseCase,
+    // GetAllFoodsUseCase,
+    // GetAllCategoriesUseCase,
+    // GetFoodByNameUseCase,
+    // GetFoodByIdUseCase,
+    // CreateFoodUseCase,
+    // ReplaceFoodUseCase,
+    // SearchFoodsUseCase,
   ],
 })
 export class HttpModule {}

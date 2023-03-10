@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Video {
+  id       Int     @id @default(autoincrement())
+  url      String
+  category String
+  Videos   Videos? @relation(fields: [videosId], references: [id])
+  videosId Int?
+}
+
+model Videos {
+  id       Int        @id @default(autoincrement())
+  videos   Video[]
+  Exercice Exercice[]
+}
+
+model Step {
+  id          Int       @id @default(autoincrement())
+  description String
+  Exercice    Exercice? @relation(fields: [exerciceId], references: [id])
+  exerciceId  String?
+}
+
+model Exercice {
+  id         String @id @default(uuid())
+  name       String
+  difficulty String
+  muscle     String
+  mode       String
+  steps      Step[]
+  videos     Videos @relation(fields: [videosId], references: [id])
+
+  videosId Int
+}
