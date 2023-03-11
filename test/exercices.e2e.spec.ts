@@ -114,9 +114,13 @@ describe('ExerciceController (e2e)', () => {
     );
   });
 
-  it('/exercices/:name (GET, 200)', async () => {
+  it('/exercices/:id (GET, 200)', async () => {
+    const exercice = makeExercice();
+
+    exerciceRepository.exercices.push(exercice);
+
     const response = await request(app.getHttpServer()).get(
-      `/exercices/${makeExercice().name}`,
+      `/exercices/${exercice.id}`,
     );
 
     expect(response.status).toBe(200);
@@ -128,9 +132,9 @@ describe('ExerciceController (e2e)', () => {
     );
   });
 
-  it('/exercices/:name (GET, 404)', async () => {
+  it('/exercices/:id (GET, 404)', async () => {
     const response = await request(app.getHttpServer()).get(
-      `/exercices/random-name`,
+      `/exercices/random-id`,
     );
 
     expect(response.status).toBe(404);
