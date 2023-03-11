@@ -42,3 +42,14 @@ model Exercice {
 
   videosId Int
 }
+
+model Food {
+  id           String @id @default(uuid())
+  name         String
+  category     String
+  protein      Float
+  carbohydrate Float
+  lipid        Float
+  fiber        Float
+  energy       Float
+}

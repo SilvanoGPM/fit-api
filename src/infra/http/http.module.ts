@@ -12,15 +12,15 @@ import { GetFoodByIdUseCase } from '@app/use-cases/foods/get-food-by-id-use-case
 import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
 import { SearchFoodsUseCase } from '@app/use-cases/foods/search-foods-use-case';
 import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
+import { DatabaseModule } from '@infra/database/database.module';
 
 import { ExerciceController } from './controllers/exercice.controller';
 import { GenericService } from './services/generic.service';
 import { FoodController } from './controllers/food.controller';
-import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [ExerciceController],
+  controllers: [ExerciceController, FoodController],
   providers: [
     GenericService,
 
@@ -30,13 +30,13 @@ import { DatabaseModule } from '@infra/database/database.module';
     ReplaceExerciceUseCase,
     SearchExercicesUseCase,
 
-    // GetAllFoodsUseCase,
-    // GetAllCategoriesUseCase,
-    // GetFoodByNameUseCase,
-    // GetFoodByIdUseCase,
-    // CreateFoodUseCase,
-    // ReplaceFoodUseCase,
-    // SearchFoodsUseCase,
+    GetAllFoodsUseCase,
+    GetAllCategoriesUseCase,
+    GetFoodByNameUseCase,
+    GetFoodByIdUseCase,
+    CreateFoodUseCase,
+    ReplaceFoodUseCase,
+    SearchFoodsUseCase,
   ],
 })
 export class HttpModule {}

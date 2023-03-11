@@ -2,14 +2,16 @@ import { Exercice as PrismaExercice, Step, Video } from '@prisma/client';
 
 import { Exercice } from '@app/entities/exercice';
 
-export class PrismaMapper {
+export class PrismaExerciceMapper {
   static toDomain(
     rawExercice: PrismaExercice & {
       steps: Step[];
       videos: { videos: Video[] };
     },
   ) {
-    const videos = PrismaMapper.getDomainVideos(rawExercice.videos.videos);
+    const videos = PrismaExerciceMapper.getDomainVideos(
+      rawExercice.videos.videos,
+    );
 
     return new Exercice(
       {

@@ -10,7 +10,7 @@ import {
 } from '@app/repositories/exercice-repository';
 
 import { PrismaService } from '../prisma.service';
-import { PrismaMapper } from '../mappers/prisma-mapper';
+import { PrismaExerciceMapper } from '../mappers/prisma-exercice-mapper';
 
 interface GetPageParams {
   size: number;
@@ -45,7 +45,7 @@ export class PrismaExerciceRepository implements ExerciceRepository {
       return null;
     }
 
-    return PrismaMapper.toDomain(rawExercice);
+    return PrismaExerciceMapper.toDomain(rawExercice);
   }
 
   async search({ page, size, ...query }: SearchExercice) {
@@ -53,8 +53,6 @@ export class PrismaExerciceRepository implements ExerciceRepository {
       page,
       size,
       where: {
-        mode: 'insensitive',
-
         AND: {
           name: {
             contains: query.name,
@@ -77,13 +75,13 @@ export class PrismaExerciceRepository implements ExerciceRepository {
   }
 
   async create(exercice: Exercice): Promise<void> {
-    const data = PrismaMapper.toPrisma(exercice);
+    const data = PrismaExerciceMapper.toPrisma(exercice);
 
     await this.prisma.exercice.create({ data });
   }
 
   async save(exercice: Exercice) {
-    const data = PrismaMapper.toPrisma(exercice);
+    const data = PrismaExerciceMapper.toPrisma(exercice);
 
     const exists = await this.findById(exercice.id);
 
@@ -114,7 +112,7 @@ export class PrismaExerciceRepository implements ExerciceRepository {
 
     const total = await this.prisma.exercice.count({ where });
 
-    const data = rawExercices.map(PrismaMapper.toDomain);
+    const data = rawExercices.map(PrismaExerciceMapper.toDomain);
 
     return {
       data,
