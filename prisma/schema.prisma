@@ -32,19 +32,23 @@ model Step {
 }
 
 model Exercice {
-  id         String @id @default(uuid())
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   name       String
   difficulty String
   muscle     String
   mode       String
   steps      Step[]
-  videos     Videos @relation(fields: [videosId], references: [id])
+  videos     Videos   @relation(fields: [videosId], references: [id])
 
   videosId Int
 }
 
 model Food {
-  id           String @id @default(uuid())
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   name         String
   category     String
   protein      Float
@@ -56,6 +60,8 @@ model Food {
 
 model User {
   id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   name         String
   email        String         @unique()
   password     String
@@ -63,8 +69,12 @@ model User {
 }
 
 model RefreshToken {
-  id     String @id @default(uuid())
-  token  String @unique
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  token     String   @unique
+  browser   String   @default("Unknown")
+  os        String   @default("Unknown")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
