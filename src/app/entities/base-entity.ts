@@ -1,4 +1,4 @@
-import { v4 as randomUUID } from 'uuid';
+import { randomUUID } from 'node:crypto';
 
 export class BaseEntity<T> {
   protected props: T;
