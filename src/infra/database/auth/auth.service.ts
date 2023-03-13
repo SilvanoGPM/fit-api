@@ -12,6 +12,11 @@ interface UserDto {
   password: string;
 }
 
+interface UserAgent {
+  os: string;
+  browser: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
@@ -36,7 +41,7 @@ export class AuthService {
     });
   }
 
-  async generateRefreshToken(user: User) {
+  async generateRefreshToken(user: User, userAgent: UserAgent) {
     const payload = { sub: user.id };
 
     const token = this.jwtService.sign(payload, {
@@ -44,7 +49,7 @@ export class AuthService {
     });
 
     await this.prisma.refreshToken.create({
-      data: { token, userId: user.id },
+      data: { token, userId: user.id, ...userAgent },
     });
 
     return token;
@@ -101,7 +106,7 @@ export class AuthService {
     return this.generateAccessToken(user);
   }
 
-  async login(userDto: UserDto) {
+  async login(userDto: UserDto, userAgent: UserAgent) {
     const user = await this.validateUser(userDto.email, userDto.password);
 
     if (!user) {
@@ -109,7 +114,7 @@ export class AuthService {
     }
 
     const accessToken = await this.generateAccessToken(user);
-    const refreshToken = await this.generateRefreshToken(user);
+    const refreshToken = await this.generateRefreshToken(user, userAgent);
 
     return { accessToken, refreshToken };
   }
