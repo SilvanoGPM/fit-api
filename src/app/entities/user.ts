@@ -15,27 +15,27 @@ export class User extends BaseEntity<UserProps> {
     this.props = props;
   }
 
-  private get name() {
+  public get name() {
     return this.props.name;
   }
 
-  private set name(name: string) {
+  public set name(name: string) {
     this.props.name = name;
   }
 
-  private get email() {
+  public get email() {
     return this.props.email;
   }
 
-  private set email(email: string) {
+  public set email(email: string) {
     this.props.email = email;
   }
 
-  private get role() {
+  public get role() {
     return this.props.role;
   }
 
-  private set role(role: string) {
+  public set role(role: string) {
     this.props.role = role;
   }
 }
