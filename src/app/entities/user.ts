@@ -1,4 +1,4 @@
-import { BaseEntity } from './base-entity';
+import { BaseEntity, BaseEntityProps } from './base-entity';
 
 export interface UserProps {
   name: string;
@@ -6,9 +6,11 @@ export interface UserProps {
   role: string;
 }
 
+export type CreateUserProps = UserProps & BaseEntityProps;
+
 export class User extends BaseEntity<UserProps> {
-  constructor(props: UserProps, id?: string) {
-    super(id);
+  constructor({ id, createdAt, updatedAt, ...props }: CreateUserProps) {
+    super({ id, createdAt, updatedAt });
 
     this.props = props;
   }

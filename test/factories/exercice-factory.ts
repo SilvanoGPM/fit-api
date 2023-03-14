@@ -1,29 +1,32 @@
-import { Exercice, ExerciceProps } from '@app/entities/exercice';
+import {
+  CreateExerciceProps,
+  Exercice,
+  ExerciceProps,
+} from '@app/entities/exercice';
+
 import { InMemoryExerciceRepository } from '@test/repositories/in-memory-exercice-repository';
 import { RepositoryUtils } from '@test/utils/repository-utils';
+
 import { generateArray } from './generic-factory';
 
-export function makeExercice(
-  exercice: Partial<ExerciceProps> = {},
-  id?: string,
-) {
-  return new Exercice(
-    {
-      name: exercice.name ?? 'test-name',
-      difficulty: exercice.difficulty ?? 'test-difficulty',
-      mode: exercice.mode ?? 'test-mode',
-      muscle: exercice.muscle ?? 'test-muscle',
-      steps: exercice.steps ?? ['test-first-step'],
-      videos: exercice.videos ?? {
-        male: ['test-male-video'],
-        female: ['test-female-video'],
-      },
+export function makeExercice(exercice: Partial<CreateExerciceProps> = {}) {
+  return new Exercice({
+    id: exercice.id ?? 'test-id',
+    createdAt: exercice.createdAt ?? 'test-created-at',
+    updatedAt: exercice.updatedAt ?? 'test-updated-at',
+    name: exercice.name ?? 'test-name',
+    difficulty: exercice.difficulty ?? 'test-difficulty',
+    mode: exercice.mode ?? 'test-mode',
+    muscle: exercice.muscle ?? 'test-muscle',
+    steps: exercice.steps ?? ['test-first-step'],
+    videos: exercice.videos ?? {
+      male: ['test-male-video'],
+      female: ['test-female-video'],
     },
-    id,
-  );
+  });
 }
 
-const defaultMap = (i) => {
+const defaultMap = (i: number) => {
   return {
     name: `Test Exercice #${i}`,
   };
@@ -38,7 +41,7 @@ export function generateExercices(
 
     const props = map(i);
 
-    return makeExercice(props, id);
+    return makeExercice({ id, ...props });
   }, total);
 }
 

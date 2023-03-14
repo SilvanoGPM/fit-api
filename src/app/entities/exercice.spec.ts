@@ -7,6 +7,8 @@ describe('Exercice entity', () => {
     expect(exercice).toEqual(
       expect.objectContaining({
         _id: expect.any(String),
+        _createdAt: expect.any(String),
+        _updatedAt: expect.any(String),
         name: expect.any(String),
         mode: expect.any(String),
         difficulty: expect.any(String),

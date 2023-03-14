@@ -3,24 +3,24 @@ import { InMemoryFoodRepository } from '@test/repositories/in-memory-food-reposi
 import { RepositoryUtils } from '@test/utils/repository-utils';
 import { generateArray } from './generic-factory';
 
-export function makeFood(food: Partial<CreateFoodProps> = {}, id?: string) {
-  return new Food(
-    {
-      name: food.name ?? 'test-name',
-      category: food.category ?? 'test-category',
-      energy: food.energy ?? 100,
-      carbohydrate: food.carbohydrate ?? 100,
-      lipid: food.lipid ?? 100,
-      fiber: food.fiber ?? 100,
-      protein: food.protein ?? 100,
-    },
-    id,
-  );
+export function makeFood(food: Partial<CreateFoodProps> = {}) {
+  return new Food({
+    id: food.id ?? 'test-id',
+    createdAt: food.createdAt ?? 'test-created-at',
+    updatedAt: food.updatedAt ?? 'test-updated-at',
+    name: food.name ?? 'test-name',
+    category: food.category ?? 'test-category',
+    energy: food.energy ?? 100,
+    carbohydrate: food.carbohydrate ?? 100,
+    lipid: food.lipid ?? 100,
+    fiber: food.fiber ?? 100,
+    protein: food.protein ?? 100,
+  });
 }
 
-const defaultMap = (i) => {
+const defaultMap = (i: number) => {
   return {
-    name: `Test Exercice #${i}`,
+    name: `Test Food #${i}`,
   };
 };
 
@@ -33,7 +33,7 @@ export function generateFoods(
 
     const props = map(i);
 
-    return makeFood(props, id);
+    return makeFood({ id, ...props });
   }, total);
 }
 

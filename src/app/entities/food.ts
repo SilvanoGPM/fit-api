@@ -1,4 +1,4 @@
-import { BaseEntity } from './base-entity';
+import { BaseEntity, BaseEntityProps } from './base-entity';
 
 interface Macro {
   quantity: number;
@@ -22,7 +22,7 @@ export interface FoodProps {
   energy: Energy;
 }
 
-export interface CreateFoodProps {
+export interface CreateFoodProps extends BaseEntityProps {
   name: string;
   category: string;
   protein: number;
@@ -33,8 +33,8 @@ export interface CreateFoodProps {
 }
 
 export class Food extends BaseEntity<FoodProps> {
-  constructor(props: CreateFoodProps, id?: string) {
-    super(id);
+  constructor({ id, createdAt, updatedAt, ...props }: CreateFoodProps) {
+    super({ id, createdAt, updatedAt });
 
     this.props = {
       name: props.name,

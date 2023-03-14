@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common';
+
 import type { Food } from '@app/entities/food';
 import type { Pageable } from '@app/repositories/pages.type';
 
@@ -8,6 +10,7 @@ import type {
 
 import { RepositoryUtils } from '@test/utils/repository-utils';
 
+@Injectable()
 export class InMemoryFoodRepository implements FoodRepository {
   constructor(
     public foods: Food[] = [],

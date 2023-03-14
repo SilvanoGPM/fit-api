@@ -13,17 +13,17 @@ export class PrismaExerciceMapper {
       rawExercice.videos.videos,
     );
 
-    return new Exercice(
-      {
-        name: rawExercice.name,
-        difficulty: rawExercice.difficulty,
-        mode: rawExercice.mode,
-        muscle: rawExercice.muscle,
-        steps: rawExercice.steps.map(({ description }) => description),
-        videos,
-      },
-      rawExercice.id,
-    );
+    return new Exercice({
+      id: rawExercice.id,
+      createdAt: rawExercice.createdAt.toISOString(),
+      updatedAt: rawExercice.updatedAt.toISOString(),
+      name: rawExercice.name,
+      difficulty: rawExercice.difficulty,
+      mode: rawExercice.mode,
+      muscle: rawExercice.muscle,
+      steps: rawExercice.steps.map(({ description }) => description),
+      videos,
+    });
   }
 
   static toPrisma(exercice: Exercice) {

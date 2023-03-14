@@ -1,4 +1,4 @@
-import { BaseEntity } from './base-entity';
+import { BaseEntity, BaseEntityProps } from './base-entity';
 
 interface ExerciceVideo {
   male: string[];
@@ -15,9 +15,12 @@ export interface ExerciceProps {
   videos: ExerciceVideo;
 }
 
+export type CreateExerciceProps = ExerciceProps & BaseEntityProps;
+
 export class Exercice extends BaseEntity<ExerciceProps> {
-  constructor(props: ExerciceProps, id?: string) {
-    super(id);
+  constructor({ id, createdAt, updatedAt, ...props }: CreateExerciceProps) {
+    super({ id, createdAt, updatedAt });
+
     this.props = props;
   }
 

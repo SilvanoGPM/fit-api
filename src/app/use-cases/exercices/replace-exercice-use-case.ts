@@ -11,13 +11,13 @@ type ExecuteParams = ExerciceProps & { id: string };
 export class ReplaceExerciceUseCase {
   constructor(private exerciceRepository: ExerciceRepository) {}
 
-  async execute({ id, ...props }: ExecuteParams) {
-    const exercice = new Exercice(props, id);
+  async execute(props: ExecuteParams) {
+    const exercice = new Exercice(props);
 
     const exists = await this.exerciceRepository.save(exercice);
 
     if (!exists) {
-      throw new NotFoundError(`Exercice not found with id [${id}]`);
+      throw new NotFoundError(`Exercice not found with id [${props.id}]`);
     }
 
     return { exercice };

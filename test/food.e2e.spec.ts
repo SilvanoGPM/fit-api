@@ -9,6 +9,8 @@ import { Food } from '@prisma/client';
 import { InMemoryFoodRepository } from './repositories/in-memory-food-repository';
 import { RepositoryUtils } from './utils/repository-utils';
 import { makeFood } from './factories/food-factory';
+import { HttpModule } from '@infra/http/http.module';
+import { DatabaseModule } from '@infra/database/database.module';
 
 function expectFood({
   id,
@@ -71,7 +73,8 @@ describe('ExerciceController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [DatabaseModule, HttpModule],
+      providers: [FoodRepository],
     })
       .overrideProvider(FoodRepository)
       .useValue(foodRepository)
@@ -262,7 +265,6 @@ describe('ExerciceController (e2e)', () => {
       fiber: 100,
       protein: 100,
     });
-
     expect(response.status).toBe(404);
   });
 });

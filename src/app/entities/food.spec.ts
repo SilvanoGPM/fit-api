@@ -7,6 +7,8 @@ describe('Food entity', () => {
     expect(food).toEqual(
       expect.objectContaining({
         _id: expect.any(String),
+        _createdAt: expect.any(String),
+        _updatedAt: expect.any(String),
         name: expect.any(String),
         baseQuantity: expect.any(Number),
         baseUnit: expect.any(String),

@@ -31,18 +31,16 @@ export class StaticFoodRepository extends InMemoryFoodRepository {
     const foods = await this.io.read<any>({ path });
 
     for (const rawFood of foods) {
-      const food = new Food(
-        {
-          name: rawFood.description,
-          category: this.categories[rawFood.category_id],
-          protein: this.mapMacro(rawFood.attributes.protein),
-          carbohydrate: this.mapMacro(rawFood.attributes.carbohydrate),
-          lipid: this.mapMacro(rawFood.attributes.lipid),
-          fiber: this.mapMacro(rawFood.attributes.fiber),
-          energy: rawFood.attributes.energy.kcal,
-        },
-        String(rawFood.id),
-      );
+      const food = new Food({
+        id: rawFood.id,
+        name: rawFood.description,
+        category: this.categories[rawFood.category_id],
+        protein: this.mapMacro(rawFood.attributes.protein),
+        carbohydrate: this.mapMacro(rawFood.attributes.carbohydrate),
+        lipid: this.mapMacro(rawFood.attributes.lipid),
+        fiber: this.mapMacro(rawFood.attributes.fiber),
+        energy: rawFood.attributes.energy.kcal,
+      });
 
       this.foods.push(food);
     }

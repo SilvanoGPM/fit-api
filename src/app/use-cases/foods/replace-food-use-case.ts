@@ -19,21 +19,18 @@ interface ReplaceFoodProps {
 export class ReplaceFoodUseCase {
   constructor(private foodRepository: FoodRepository) {}
 
-  async execute({ id, ...props }: ReplaceFoodProps) {
+  async execute(props: ReplaceFoodProps) {
     const categories = await this.foodRepository.getCategories();
 
-    const food = new Food(
-      {
-        ...props,
-        category: props.categoryId ? categories[props.categoryId] : 'Outros',
-      },
-      id,
-    );
+    const food = new Food({
+      ...props,
+      category: props.categoryId ? categories[props.categoryId] : 'Outros',
+    });
 
     const exists = await this.foodRepository.save(food);
 
     if (!exists) {
-      throw new NotFoundError(`Food not found with id [${id}]`);
+      throw new NotFoundError(`Food not found with id [${props.id}]`);
     }
 
     return { food };
