@@ -3,6 +3,11 @@ import {
   RefreshToken,
 } from '@app/entities/refresh-token';
 
+import { InMemoryRefreshTokenRepository } from '@test/repositories/in-memory-refresh-token-repository';
+import { RepositoryUtils } from '@test/utils/repository-utils';
+
+import { generateArray } from './generic-factory';
+
 import { makeUser } from './user-factory';
 
 export function makeRefreshToken(
@@ -17,4 +22,29 @@ export function makeRefreshToken(
     os: refreshToken.os ?? 'test-os',
     user: refreshToken.user ?? makeUser(),
   });
+}
+
+const defaultMap = (i: number) => {
+  return {
+    token: `Test Token #${i}`,
+  };
+};
+
+export function generateRefreshTokens(
+  total = 100,
+  map: (i: number) => Partial<CreateRefreshTokenProps> = defaultMap,
+) {
+  return generateArray((i) => {
+    const id = String(i);
+
+    const props = map(i);
+
+    return makeRefreshToken({ id, ...props });
+  }, total);
+}
+
+export function makeRepository(refreshTokens: RefreshToken[] = []) {
+  const utils = new RepositoryUtils<RefreshToken>();
+
+  return new InMemoryRefreshTokenRepository(refreshTokens, utils);
 }
