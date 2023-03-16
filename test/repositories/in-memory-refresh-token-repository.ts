@@ -30,8 +30,8 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     return refreshToken;
   }
 
-  create(refreshToken: RefreshToken): Promise<void> {
-    throw new Error('Method not implemented.');
+  async create(refreshToken: RefreshToken) {
+    this.refreshTokens.push(refreshToken);
   }
 
   delete(refreshToken: RefreshToken): Promise<void> {
