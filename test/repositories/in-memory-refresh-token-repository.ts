@@ -34,12 +34,14 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     this.refreshTokens.push(refreshToken);
   }
 
-  delete(refreshToken: RefreshToken): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(refreshToken: RefreshToken) {
+    this.refreshTokens = this.refreshTokens.filter(
+      (innerRefreshToken) => innerRefreshToken.id !== refreshToken.id,
+    );
   }
 
-  async sign(payload: { sub?: string }): Promise<string> {
-    return payload.sub ?? '';
+  async sign(payload: { sub: string }) {
+    return payload.sub;
   }
 
   async comparePassword(password1: string, password2: string) {
