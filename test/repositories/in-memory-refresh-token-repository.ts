@@ -18,8 +18,16 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     return this.utils.getPage({ data: tokens, ...pageable });
   }
 
-  findByToken(token: string): Promise<RefreshToken | null> {
-    throw new Error('Method not implemented.');
+  async findByToken(token: string) {
+    const refreshToken = this.refreshTokens.find(
+      (refreshToken) => refreshToken.token === token,
+    );
+
+    if (!refreshToken) {
+      return null;
+    }
+
+    return refreshToken;
   }
 
   create(refreshToken: RefreshToken): Promise<void> {
@@ -30,11 +38,11 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     throw new Error('Method not implemented.');
   }
 
-  sign(payload: object, expiresIn: string | number): Promise<string> {
-    throw new Error('Method not implemented.');
+  async sign(payload: { sub?: string }): Promise<string> {
+    return payload.sub ?? '';
   }
 
-  comparePassword(password1: string, password2: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async comparePassword(password1: string, password2: string) {
+    return password1 === password2;
   }
 }
