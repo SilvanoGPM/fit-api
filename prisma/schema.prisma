@@ -65,6 +65,7 @@ model User {
   name         String
   email        String         @unique()
   password     String
+  role         String         @default("user")
   RefreshToken RefreshToken[]
 }
 

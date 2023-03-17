@@ -4,11 +4,12 @@ export interface UserProps {
   name: string;
   email: string;
   role: string;
+  password: string;
 }
 
 export type CreateUserProps = UserProps & BaseEntityProps;
 
-export class User extends BaseEntity<UserProps> {
+export class User extends BaseEntity<UserProps, 'password'> {
   constructor({ id, createdAt, updatedAt, ...props }: CreateUserProps) {
     super({ id, createdAt, updatedAt });
 
@@ -37,5 +38,22 @@ export class User extends BaseEntity<UserProps> {
 
   public set role(role: string) {
     this.props.role = role;
+  }
+
+  public get password() {
+    return this.props.password;
+  }
+
+  public set password(password: string) {
+    this.props.password = password;
+  }
+
+  toJSON() {
+    const json = super.toJSON();
+
+    return {
+      ...json,
+      password: null,
+    };
   }
 }

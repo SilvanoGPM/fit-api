@@ -6,7 +6,7 @@ export interface BaseEntityProps {
   updatedAt?: string;
 }
 
-export class BaseEntity<T> {
+export class BaseEntity<T, O extends keyof T = never> {
   protected props: T;
   protected _id: string;
   protected _createdAt: string;
@@ -30,7 +30,7 @@ export class BaseEntity<T> {
     return this._updatedAt;
   }
 
-  toJSON() {
+  toJSON(): Omit<T, O> {
     return {
       _id: this.id,
       _createdAt: this.createdAt,
