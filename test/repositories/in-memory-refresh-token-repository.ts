@@ -44,6 +44,16 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     return payload.sub;
   }
 
+  async verify(refreshToken: string) {
+    const token = this.refreshTokens.find(
+      (token) => token.token === refreshToken,
+    );
+
+    return {
+      sub: token?.user.id ?? '',
+    };
+  }
+
   async validateUser(email: string) {
     const token = this.refreshTokens.find(
       (token) => token.user.email === email,
