@@ -38,9 +38,12 @@ export class LoginUseCase {
 
     const { accessToken } = await this.generateAccessToken.execute(user.id);
 
-    const refreshToken = await this.refreshTokenRepository.sign({
-      sub: user.id,
-    });
+    const refreshToken = await this.refreshTokenRepository.sign(
+      {
+        sub: user.id,
+      },
+      process.env.REFRESH_TOKEN_EXPIRATION_TIME,
+    );
 
     await this.createRefreshToken.execute({
       token: refreshToken,

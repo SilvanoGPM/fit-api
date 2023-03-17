@@ -13,7 +13,6 @@ import { UserController } from './controllers/user.controller';
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME },
     }),
   ],
   providers: [PrismaService, AuthService, JwtStrategy, JwtRefreshTokenStrategy],

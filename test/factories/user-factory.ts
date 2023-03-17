@@ -12,6 +12,7 @@ export function makeUser(user: Partial<CreateUserProps> = {}) {
     email: user.email ?? 'test-email',
     name: user.name ?? 'test-name',
     role: user.role ?? 'test-role',
+    password: user.password ?? 'test-password',
   });
 }
 

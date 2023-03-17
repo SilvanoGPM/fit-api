@@ -17,7 +17,7 @@ export abstract class RefreshTokenRepository {
   abstract create(refreshToken: RefreshToken): Promise<void>;
   abstract delete(refreshToken: RefreshToken): Promise<void>;
 
-  abstract sign(payload: Payload): Promise<string>;
+  abstract sign(payload: Payload, expiresIn?: string | number): Promise<string>;
   abstract verify(token: string): Promise<Payload>;
 
   abstract validateUser(email: string, password: string): Promise<User | null>;

@@ -46,7 +46,7 @@ export class PrismaUserRepository implements UserRepository {
     const start = size * (page - 1);
     const end = start + size;
 
-    const rawFoods = await this.prisma.user.findMany({
+    const rawUsers = await this.prisma.user.findMany({
       skip: start,
       take: end,
 
@@ -55,7 +55,7 @@ export class PrismaUserRepository implements UserRepository {
 
     const total = await this.prisma.user.count({ where });
 
-    const data = rawFoods.map(PrismaUserMapper.toDomain);
+    const data = rawUsers.map(PrismaUserMapper.toDomain);
 
     return {
       data,

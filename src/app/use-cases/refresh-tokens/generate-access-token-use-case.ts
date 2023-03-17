@@ -7,7 +7,10 @@ export class GenerateAccessTokenUseCase {
   constructor(private refreshTokenRepository: RefreshTokenRepository) {}
 
   async execute(userId: string) {
-    const accessToken = await this.refreshTokenRepository.sign({ sub: userId });
+    const accessToken = await this.refreshTokenRepository.sign(
+      { sub: userId },
+      process.env.ACCESS_TOKEN_EXPIRATION_TIME,
+    );
 
     return { accessToken };
   }
