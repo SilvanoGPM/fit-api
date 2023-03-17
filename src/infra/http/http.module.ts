@@ -13,14 +13,19 @@ import { ReplaceFoodUseCase } from '@app/use-cases/foods/replace-food-use-case';
 import { SearchFoodsUseCase } from '@app/use-cases/foods/search-foods-use-case';
 import { GetAllCategoriesUseCase } from '@app/use-cases/foods/get-all-categories-use-case';
 import { DatabaseModule } from '@infra/database/database.module';
+import { GetAllUsersUseCase } from '@app/use-cases/users/get-all-users-use-case';
+import { GetUserByEmailUseCase } from '@app/use-cases/users/get-user-by-email-use-case';
+import { CreateUserUseCase } from '@app/use-cases/users/create-user-use-case';
+import { UserExistsByEmailUseCase } from '@app/use-cases/users/user-exists-by-email-use-case';
 
 import { ExerciceController } from './controllers/exercice.controller';
 import { GenericService } from './services/generic.service';
 import { FoodController } from './controllers/food.controller';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [ExerciceController, FoodController],
+  controllers: [ExerciceController, FoodController, UserController],
   providers: [
     GenericService,
 
@@ -37,6 +42,11 @@ import { FoodController } from './controllers/food.controller';
     CreateFoodUseCase,
     ReplaceFoodUseCase,
     SearchFoodsUseCase,
+
+    GetAllUsersUseCase,
+    GetUserByEmailUseCase,
+    CreateUserUseCase,
+    UserExistsByEmailUseCase,
   ],
 })
 export class HttpModule {}
