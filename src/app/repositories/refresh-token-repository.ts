@@ -15,8 +15,5 @@ export abstract class RefreshTokenRepository {
 
   abstract sign(payload: object): Promise<string>;
 
-  abstract comparePassword(
-    password1: string,
-    password2: string,
-  ): Promise<boolean>;
+  abstract validateUser(email: string, password: string): Promise<User | null>;
 }

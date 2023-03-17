@@ -44,7 +44,15 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     return payload.sub;
   }
 
-  async comparePassword(password1: string, password2: string) {
-    return password1 === password2;
+  async validateUser(email: string) {
+    const token = this.refreshTokens.find(
+      (token) => token.user.email === email,
+    );
+
+    if (!token) {
+      return null;
+    }
+
+    return token.user;
   }
 }

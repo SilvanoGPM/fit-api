@@ -32,6 +32,7 @@ describe('GetRefreshTokenByToken use case', () => {
     const getRefreshTokenByToken = new GetRefreshTokenByTokenUseCase(
       refreshTokenRepository,
     );
+
     expect(() => {
       return getRefreshTokenByToken.execute('random-token');
     }).rejects.toThrow(NotFoundError);
