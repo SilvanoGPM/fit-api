@@ -13,7 +13,7 @@ export abstract class RefreshTokenRepository {
   abstract create(refreshToken: RefreshToken): Promise<void>;
   abstract delete(refreshToken: RefreshToken): Promise<void>;
 
-  abstract sign(payload: object, expiresIn: string | number): Promise<string>;
+  abstract sign(payload: object): Promise<string>;
 
   abstract comparePassword(
     password1: string,
