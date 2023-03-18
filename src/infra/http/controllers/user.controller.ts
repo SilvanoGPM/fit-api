@@ -10,6 +10,8 @@ import {
   Put,
 } from '@nestjs/common';
 
+import { ApiBearerAuth } from '@nestjs/swagger';
+
 import { Pageable } from '@app/repositories/pages.type';
 import { GetAllUsersUseCase } from '@app/use-cases/users/get-all-users-use-case';
 import { User } from '@app/entities/user';
@@ -83,6 +85,7 @@ export class UserController {
 
   @Put()
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
   async replace() {
     console.log('replace');
   }

@@ -17,6 +17,7 @@ import {
   ApiOperation,
   ApiTags,
   ApiUnprocessableEntityResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import { CreateExerciceUseCase } from '@app/use-cases/exercices/create-exercice-use-case';
@@ -93,6 +94,7 @@ export class ExerciceController {
   @Post()
   @HttpCode(201)
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Persiste um novo exercício.' })
   @ApiCreatedResponse({ description: 'Exercício foi criado com sucesso' })
   @ApiUnprocessableEntityResponse({
@@ -115,6 +117,7 @@ export class ExerciceController {
 
   @Put()
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualiza um exercício.' })
   @ApiOkResponse({ description: 'Exercício atualizado com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhum exercício encontrado' })

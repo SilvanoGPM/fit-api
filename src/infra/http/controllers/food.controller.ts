@@ -17,6 +17,7 @@ import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiUnprocessableEntityResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 import { GetAllFoodsUseCase } from '@app/use-cases/foods/get-all-foods-use-case';
@@ -136,6 +137,7 @@ export class FoodController {
   @Post()
   @HttpCode(201)
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Persiste uma nova comida.' })
   @ApiCreatedResponse({ description: 'Comida foi criada com sucesso' })
   @ApiUnprocessableEntityResponse({
@@ -160,6 +162,7 @@ export class FoodController {
 
   @Put()
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualiza uma comida.' })
   @ApiOkResponse({ description: 'Comida atualizada com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })

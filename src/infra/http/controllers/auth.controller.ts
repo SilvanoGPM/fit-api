@@ -106,6 +106,7 @@ export class AuthController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @UseGuards(IsUser)
   async revoke(@Param('id') id: string) {
     try {
       await this.revokeRefreshToken.execute(id);

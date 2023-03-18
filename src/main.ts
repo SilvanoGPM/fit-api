@@ -23,11 +23,14 @@ async function bootstrap() {
     .setTitle('Fit API')
     .setDescription(description)
     .setVersion(version)
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api-docs', app, document);
+  SwaggerModule.setup('api-docs', app, document, {
+    customSiteTitle: 'Fit API Documentation',
+  });
 
   await app.listen(3000);
 }
