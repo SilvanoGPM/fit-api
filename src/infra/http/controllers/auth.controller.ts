@@ -11,6 +11,7 @@ import {
   UseGuards,
   Delete,
   Param,
+  ForbiddenException,
 } from '@nestjs/common';
 
 import { Request } from 'express';
@@ -31,6 +32,7 @@ import { GenericService } from '../services/generic.service';
 import { CurrentUser } from '../auth/guards/current-user.guard';
 import { IsUser } from '../auth/guards/is-user.guard';
 import { RefreshTokenNotFoundError } from '../errors/refresh-token-not-found.error';
+import { InsufficientPermissionError } from '@app/use-cases/errors/insufficient-permission.error';
 
 @Controller('auth')
 export class AuthController {
@@ -107,10 +109,17 @@ export class AuthController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(IsUser)
-  async revoke(@Param('id') id: string) {
+  async revoke(@CurrentUser() user: User, @Param('id') id: string) {
     try {
-      await this.revokeRefreshToken.execute(id);
+      await this.revokeRefreshToken.execute(id, user.email);
     } catch (error) {
+      if (error instanceof InsufficientPermissionError) {
+        throw new ForbiddenException('Forbidden', {
+          cause: error,
+          description: error.message,
+        });
+      }
+
       throw new RefreshTokenNotFoundError(error);
     }
   }
