@@ -1,8 +1,8 @@
-import { NotFoundError } from '../errors/not-found.error';
-import { Food } from '@app/entities/food';
-import { ReplaceUserUseCase } from './replace-user-use-case';
-import { makeUser, makeRepository } from '@test/factories/user-factory';
 import { User } from '@app/entities/user';
+import { makeUser, makeRepository } from '@test/factories/user-factory';
+
+import { NotFoundError } from '../errors/not-found.error';
+import { ReplaceUserUseCase } from './replace-user-use-case';
 
 describe('ReplaceUser use case', () => {
   it('should be able to replace an user', async () => {
