@@ -8,6 +8,8 @@ import {
   UseGuards,
   Patch,
   Put,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -18,13 +20,18 @@ import { User } from '@app/entities/user';
 import { CreateUserUseCase } from '@app/use-cases/users/create-user-use-case';
 import { UserExistsByEmailUseCase } from '@app/use-cases/users/user-exists-by-email-use-case';
 import { GetUserByEmailUseCase } from '@app/use-cases/users/get-user-by-email-use-case';
+import { ReplaceUserUseCase } from '@app/use-cases/users/replace-user-use-case';
+import { PromoteUserUseCase } from '@app/use-cases/users/promote-user-use-case';
 
 import { GenericService } from '../services/generic.service';
-import { UserFoodNotFoundError } from '../errors/user-not-found.error';
+import { UserNotFoundError } from '../errors/user-not-found.error';
 import { CreateUserDTO } from '../dtos/users/create-user.dto';
 import { CurrentUser } from '../auth/guards/current-user.guard';
 import { IsUser } from '../auth/guards/is-user.guard';
 import { IsAdmin } from '../auth/guards/is-admin.guard';
+import { ReplaceUserDTO } from '../dtos/users/replace-user.dto';
+import { PromoteUserDTO } from '../dtos/users/promote-user.dto';
+import { UserAlreadyExists } from '../errors/user-already-exists.error';
 
 @Controller('users')
 export class UserController {
@@ -33,6 +40,8 @@ export class UserController {
     private getUserByEmail: GetUserByEmailUseCase,
     private userExistsByEmail: UserExistsByEmailUseCase,
     private createUser: CreateUserUseCase,
+    private replaceUser: ReplaceUserUseCase,
+    private promoteUser: PromoteUserUseCase,
     private genericService: GenericService,
   ) {}
 
@@ -58,7 +67,7 @@ export class UserController {
 
       return { user };
     } catch (error) {
-      throw new UserFoodNotFoundError(error);
+      throw new UserNotFoundError(error);
     }
   }
 
@@ -73,6 +82,12 @@ export class UserController {
   async create(@Body() createUserDto: CreateUserDTO) {
     const { email, password, name } = createUserDto;
 
+    const userAlreadyExists = await this.userExistsByEmail.execute(email);
+
+    if (userAlreadyExists) {
+      throw new UserAlreadyExists(email);
+    }
+
     const user = await this.createUser.execute({
       email,
       password,
@@ -84,15 +99,37 @@ export class UserController {
   }
 
   @Put()
-  @UseGuards(IsAdmin)
+  @UseGuards(IsUser)
   @ApiBearerAuth()
-  async replace() {
-    console.log('replace');
+  async replace(
+    @CurrentUser() currentUser: User,
+    @Body() replaceUserDto: ReplaceUserDTO,
+  ) {
+    try {
+      const { id, email, role } = currentUser;
+
+      const { user } = await this.replaceUser.execute({
+        id,
+        role,
+        email,
+        name: replaceUserDto.name,
+        password: replaceUserDto.password,
+      });
+
+      return { user };
+    } catch (error) {
+      throw new UserNotFoundError(error);
+    }
   }
 
-  @Patch(':email')
+  @Patch('promote')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(IsAdmin)
-  async promote(@Param('email') email: string) {
-    console.log(email);
+  async promote(@Body() promoteDto: PromoteUserDTO) {
+    try {
+      await this.promoteUser.execute(promoteDto.email, promoteDto.role);
+    } catch (error) {
+      throw new UserNotFoundError(error);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 
-export class UserFoodNotFoundError extends NotFoundException {
+export class UserNotFoundError extends NotFoundException {
   constructor(error: any) {
     super('User not found', {
       cause: error,

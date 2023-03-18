@@ -1,8 +1,8 @@
 import { makeUser, makeRepository } from '@test/factories/user-factory';
 
 import { ReplaceUserUseCase } from './replace-user-use-case';
-import { GetUserByIdUseCase } from './get-user-by-id-use-case';
 import { PromoteUserUseCase } from './promote-user-use-case';
+import { GetUserByEmailUseCase } from './get-user-by-email-use-case';
 
 describe('PromoteUser use case', () => {
   it('should be able to promote an user', async () => {
@@ -10,13 +10,13 @@ describe('PromoteUser use case', () => {
 
     const userRepository = makeRepository([initialUser]);
 
-    const getUserById = new GetUserByIdUseCase(userRepository);
+    const getUserByEmail = new GetUserByEmailUseCase(userRepository);
 
     const replaceUser = new ReplaceUserUseCase(userRepository);
 
-    const promoteUser = new PromoteUserUseCase(replaceUser, getUserById);
+    const promoteUser = new PromoteUserUseCase(replaceUser, getUserByEmail);
 
-    await promoteUser.execute(initialUser.id, 'other-role');
+    await promoteUser.execute(initialUser.email, 'other-role');
 
     expect(userRepository.users).toHaveLength(1);
     expect(userRepository.users[0]).toBeTruthy();

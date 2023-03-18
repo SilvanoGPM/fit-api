@@ -42,6 +42,20 @@ export class PrismaUserRepository implements UserRepository {
     await this.prisma.user.create({ data });
   }
 
+  async save(user: User) {
+    const data = PrismaUserMapper.toPrisma(user);
+
+    const exists = await this.findById(user.id);
+
+    if (!exists) {
+      return false;
+    }
+
+    await this.prisma.user.update({ data, where: { id: user.id } });
+
+    return true;
+  }
+
   private async getPage({ page, size, where }: GetPageParams) {
     const start = size * (page - 1);
     const end = start + size;

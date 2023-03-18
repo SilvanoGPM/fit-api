@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { GetUserByEmailUseCase } from './get-user-by-email-use-case';
 
 import { ReplaceUserUseCase } from './replace-user-use-case';
-import { GetUserByIdUseCase } from './get-user-by-id-use-case';
 
 @Injectable()
 export class PromoteUserUseCase {
   constructor(
     private replaceUser: ReplaceUserUseCase,
-    private getUserById: GetUserByIdUseCase,
+    private getUserByEmail: GetUserByEmailUseCase,
   ) {}
 
-  async execute(id: string, role: string) {
-    const { user } = await this.getUserById.execute(id);
+  async execute(email: string, role: string) {
+    const { user } = await this.getUserByEmail.execute(email);
 
-    const { email, name, password } = user;
+    const { id, name, password } = user;
 
     await this.replaceUser.execute({
       id,
