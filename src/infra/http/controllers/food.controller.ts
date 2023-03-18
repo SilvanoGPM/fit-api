@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
@@ -33,6 +34,7 @@ import { GenericService } from '../services/generic.service';
 import { FoodNotFoundError } from '../errors/food-not-found.error';
 import { CreateFoodDTO } from '../dtos/foods/create-food.dto';
 import { ReplaceFoodDTO } from '../dtos/foods/replace-food.dto';
+import { IsAdmin } from '../auth/guards/is-admin.guard';
 
 type RawSearchFoods = Replace<
   SearchFoods,
@@ -133,6 +135,7 @@ export class FoodController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(IsAdmin)
   @ApiOperation({ summary: 'Persiste uma nova comida.' })
   @ApiCreatedResponse({ description: 'Comida foi criada com sucesso' })
   @ApiUnprocessableEntityResponse({
@@ -156,6 +159,7 @@ export class FoodController {
   }
 
   @Put()
+  @UseGuards(IsAdmin)
   @ApiOperation({ summary: 'Atualiza uma comida.' })
   @ApiOkResponse({ description: 'Comida atualizada com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })

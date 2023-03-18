@@ -7,6 +7,7 @@ import {
   Body,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
@@ -30,6 +31,7 @@ import { GenericService } from '../services/generic.service';
 import { CreateExerciceDTO } from '../dtos/exercices/create-exercice.dto';
 import { ReplaceExerciceDTO } from '../dtos/exercices/replace-exercice.dto';
 import { ExerciceNotFoundError } from '../errors/exercice-not-found.error';
+import { IsAdmin } from '../auth/guards/is-admin.guard';
 
 @ApiTags('Exercícios')
 @Controller('exercices')
@@ -90,6 +92,7 @@ export class ExerciceController {
 
   @Post()
   @HttpCode(201)
+  @UseGuards(IsAdmin)
   @ApiOperation({ summary: 'Persiste um novo exercício.' })
   @ApiCreatedResponse({ description: 'Exercício foi criado com sucesso' })
   @ApiUnprocessableEntityResponse({
@@ -111,6 +114,7 @@ export class ExerciceController {
   }
 
   @Put()
+  @UseGuards(IsAdmin)
   @ApiOperation({ summary: 'Atualiza um exercício.' })
   @ApiOkResponse({ description: 'Exercício atualizado com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhum exercício encontrado' })

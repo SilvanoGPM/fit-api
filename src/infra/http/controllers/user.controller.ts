@@ -6,6 +6,8 @@ import {
   Query,
   Body,
   UseGuards,
+  Patch,
+  Put,
 } from '@nestjs/common';
 
 import { Pageable } from '@app/repositories/pages.type';
@@ -20,6 +22,7 @@ import { UserFoodNotFoundError } from '../errors/user-not-found.error';
 import { CreateUserDTO } from '../dtos/users/create-user.dto';
 import { CurrentUser } from '../auth/guards/current-user.guard';
 import { IsUser } from '../auth/guards/is-user.guard';
+import { IsAdmin } from '../auth/guards/is-admin.guard';
 
 @Controller('users')
 export class UserController {
@@ -76,5 +79,17 @@ export class UserController {
     });
 
     return { user };
+  }
+
+  @Put()
+  @UseGuards(IsAdmin)
+  async replace() {
+    console.log('replace');
+  }
+
+  @Patch(':email')
+  @UseGuards(IsAdmin)
+  async promote(@Param('email') email: string) {
+    console.log(email);
   }
 }

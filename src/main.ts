@@ -1,4 +1,4 @@
-import { HttpExceptionFilter } from '@infra/http/handler/http-exception-filter';
+import { HttpExceptionFilter } from '@infra/http/filters/http-exception-filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
