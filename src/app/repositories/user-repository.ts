@@ -8,4 +8,5 @@ export abstract class UserRepository {
   abstract findById(id: string): Promise<User | null>;
   abstract existsByEmail(email: string): Promise<boolean>;
   abstract create(user: User): Promise<void>;
+  abstract save(user: User): Promise<boolean>;
 }

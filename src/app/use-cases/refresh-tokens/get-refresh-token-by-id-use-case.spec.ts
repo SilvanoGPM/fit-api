@@ -6,7 +6,7 @@ import {
 } from '@test/factories/refresh-token-factory';
 
 import { NotFoundError } from '../errors/not-found.error';
-import { GetRefreshTokenByTokenUseCase } from './get-refresh-token-by-token-use-case';
+import { GetRefreshTokenByIdUseCase } from './get-refresh-token-by-id-use-case';
 
 describe('GetRefreshTokenById use case', () => {
   it('should be able to get a token', async () => {
@@ -14,13 +14,11 @@ describe('GetRefreshTokenById use case', () => {
 
     const refreshTokenRepository = makeRepository([initialToken]);
 
-    const getRefreshTokenByToken = new GetRefreshTokenByTokenUseCase(
+    const getRefreshTokenById = new GetRefreshTokenByIdUseCase(
       refreshTokenRepository,
     );
 
-    const { refreshToken } = await getRefreshTokenByToken.execute(
-      initialToken.id,
-    );
+    const { refreshToken } = await getRefreshTokenById.execute(initialToken.id);
 
     expect(refreshToken).toBeInstanceOf(RefreshToken);
     expect(refreshToken).toEqual(initialToken);
@@ -29,12 +27,12 @@ describe('GetRefreshTokenById use case', () => {
   it('should not be able to get a token when it does not exists', async () => {
     const refreshTokenRepository = makeRepository();
 
-    const getRefreshTokenByToken = new GetRefreshTokenByTokenUseCase(
+    const getRefreshTokenById = new GetRefreshTokenByIdUseCase(
       refreshTokenRepository,
     );
 
     expect(() => {
-      return getRefreshTokenByToken.execute('random-id');
+      return getRefreshTokenById.execute('random-id');
     }).rejects.toThrow(NotFoundError);
   });
 });

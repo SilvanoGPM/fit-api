@@ -65,6 +65,10 @@ function expectFood({
 }
 
 describe('ExerciceController (e2e)', () => {
+  it('', () => {
+    console.log('food');
+  });
+
   // let app: INestApplication;
 
   // const foodRepository = new InMemoryFoodRepository([], new RepositoryUtils(), {

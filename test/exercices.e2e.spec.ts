@@ -38,6 +38,10 @@ function expectExercice({
 }
 
 describe('ExerciceController (e2e)', () => {
+  it('', () => {
+    console.log('exercice');
+  });
+
   // let app: INestApplication;
 
   // const repositoryUtils = new RepositoryUtils<Exercice>();

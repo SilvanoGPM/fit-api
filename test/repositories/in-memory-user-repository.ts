@@ -43,4 +43,16 @@ export class InMemoryUserRepository implements UserRepository {
   async create(user: User) {
     this.users.push(user);
   }
+
+  async save(user: User) {
+    const index = this.users.findIndex((innerUser) => innerUser.id === user.id);
+
+    const exists = index >= 0;
+
+    if (exists) {
+      this.users[index] = user;
+    }
+
+    return exists;
+  }
 }
