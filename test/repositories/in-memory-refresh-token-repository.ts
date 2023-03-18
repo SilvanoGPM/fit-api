@@ -30,6 +30,18 @@ export class InMemoryRefreshTokenRepository implements RefreshTokenRepository {
     return refreshToken;
   }
 
+  async findById(id: string) {
+    const refreshToken = this.refreshTokens.find(
+      (refreshToken) => refreshToken.id === id,
+    );
+
+    if (!refreshToken) {
+      return null;
+    }
+
+    return refreshToken;
+  }
+
   async create(refreshToken: RefreshToken) {
     this.refreshTokens.push(refreshToken);
   }

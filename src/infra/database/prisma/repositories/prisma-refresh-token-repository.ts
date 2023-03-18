@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 
 import { RefreshToken } from '@app/entities/refresh-token';
 import { User } from '@app/entities/user';
@@ -10,6 +11,7 @@ import { RefreshTokenRepository } from '@app/repositories/refresh-token-reposito
 import { PrismaService } from '../prisma.service';
 import { PrismaRefreshTokenMapper } from '../mappers/prisma-refresh-token-mapper';
 import { PrismaUserMapper } from '../mappers/prisma-user-mapper';
+import { TokenExpiredError } from '../errors/token-expired.error';
 
 interface GetPageParams {
   size: number;
@@ -21,6 +23,7 @@ const globalInclude = {
   user: true,
 };
 
+@Injectable()
 export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
@@ -34,17 +37,12 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
     });
   }
 
-  async findByToken(token: string): Promise<RefreshToken | null> {
-    const rawRefreshToken = await this.prisma.refreshToken.findUnique({
-      where: { token },
-      include: globalInclude,
-    });
+  async findById(id: string) {
+    return this.findBy('id', id);
+  }
 
-    if (!rawRefreshToken) {
-      return null;
-    }
-
-    return PrismaRefreshTokenMapper.toDomain(rawRefreshToken);
+  async findByToken(token: string) {
+    return this.findBy('token', token);
   }
 
   async create(refreshToken: RefreshToken) {
@@ -68,11 +66,19 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
   }
 
   async verify(token: string) {
-    const { sub } = this.jwtService.verify(token, {
-      secret: process.env.JWT_SECRET,
-    });
+    try {
+      const { sub } = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      });
 
-    return { sub };
+      return { sub };
+    } catch (error: any) {
+      if (error.name === 'TokenExpiredError') {
+        throw new TokenExpiredError(error.expiredAt);
+      }
+
+      throw error;
+    }
   }
 
   async validateUser(email: string, password: string) {
@@ -111,5 +117,18 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
       size,
       hasNext: total > end,
     };
+  }
+
+  private async findBy(by: 'id' | 'token', value: string) {
+    const rawRefreshToken = await this.prisma.refreshToken.findUnique({
+      where: { [by]: value },
+      include: globalInclude,
+    });
+
+    if (!rawRefreshToken) {
+      return null;
+    }
+
+    return PrismaRefreshTokenMapper.toDomain(rawRefreshToken);
   }
 }

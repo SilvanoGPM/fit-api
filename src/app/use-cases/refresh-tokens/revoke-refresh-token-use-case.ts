@@ -2,17 +2,17 @@ import { Injectable } from '@nestjs/common';
 
 import { RefreshTokenRepository } from '@app/repositories/refresh-token-repository';
 
-import { GetRefreshTokenByTokenUseCase } from './get-refresh-token-by-token-use-case';
+import { GetRefreshTokenByIdUseCase } from './get-refresh-token-by-id-use-case';
 
 @Injectable()
 export class RevokeRefreshTokenUseCase {
   constructor(
     private refreshTokenRepository: RefreshTokenRepository,
-    private getRefreshTokenByToken: GetRefreshTokenByTokenUseCase,
+    private getRefreshTokenById: GetRefreshTokenByIdUseCase,
   ) {}
 
-  async execute(token: string) {
-    const { refreshToken } = await this.getRefreshTokenByToken.execute(token);
+  async execute(id: string) {
+    const { refreshToken } = await this.getRefreshTokenById.execute(id);
 
     await this.refreshTokenRepository.delete(refreshToken);
   }

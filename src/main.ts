@@ -1,3 +1,4 @@
+import { HttpExceptionFilter } from '@infra/http/handler/http-exception-filter';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   app.useGlobalPipes(new ValidationPipe({ errorHttpStatusCode: 422 }));
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.enableVersioning({
     type: VersioningType.URI,

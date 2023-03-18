@@ -1,14 +1,25 @@
-import { Controller, Get, Param, Post, Query, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Body,
+  UseGuards,
+} from '@nestjs/common';
 
 import { Pageable } from '@app/repositories/pages.type';
 import { GetAllUsersUseCase } from '@app/use-cases/users/get-all-users-use-case';
+import { User } from '@app/entities/user';
+import { CreateUserUseCase } from '@app/use-cases/users/create-user-use-case';
+import { UserExistsByEmailUseCase } from '@app/use-cases/users/user-exists-by-email-use-case';
+import { GetUserByEmailUseCase } from '@app/use-cases/users/get-user-by-email-use-case';
 
 import { GenericService } from '../services/generic.service';
-import { GetUserByEmailUseCase } from '@app/use-cases/users/get-user-by-email-use-case';
 import { UserFoodNotFoundError } from '../errors/user-not-found.error';
-import { UserExistsByEmailUseCase } from '@app/use-cases/users/user-exists-by-email-use-case';
-import { CreateUserUseCase } from '@app/use-cases/users/create-user-use-case';
 import { CreateUserDTO } from '../dtos/users/create-user.dto';
+import { CurrentUser } from '../auth/guards/current-user.guard';
+import { IsUser } from '../auth/guards/is-user.guard';
 
 @Controller('users')
 export class UserController {
@@ -27,6 +38,12 @@ export class UserController {
     const { users } = await this.getAllUsers.execute(params);
 
     return users;
+  }
+
+  @Get('me')
+  @UseGuards(IsUser)
+  async getProfile(@CurrentUser() user: User) {
+    return user;
   }
 
   @Get(':email')

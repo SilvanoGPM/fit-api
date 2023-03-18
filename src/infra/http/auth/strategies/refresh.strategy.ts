@@ -2,10 +2,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 
-import { PrismaService } from '@infra/database/prisma/prisma.service';
-
-import { RefreshToken } from '.prisma/client';
-import { AuthService } from '../auth.service';
+import { GetRefreshTokenByTokenUseCase } from '@app/use-cases/refresh-tokens/get-refresh-token-by-token-use-case';
 
 interface JwtPayload {
   sub: string;
@@ -17,7 +14,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh-token',
 ) {
-  constructor(private authService: AuthService, private prisma: PrismaService) {
+  constructor(private getRefreshToken: GetRefreshTokenByTokenUseCase) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       ignoreExpiration: true,
@@ -25,8 +22,8 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: JwtPayload): Promise<RefreshToken> {
-    const refreshToken = await this.authService.getRefreshToken(payload.sub);
+  async validate(payload: JwtPayload) {
+    const { refreshToken } = await this.getRefreshToken.execute(payload.sub);
 
     if (!refreshToken || refreshToken.token !== payload.jti) {
       throw new Error('Invalid token');
