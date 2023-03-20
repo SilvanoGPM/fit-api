@@ -33,10 +33,14 @@ describe('Login use case', () => {
       password: 'test1234',
     };
 
-    const { accessToken, refreshToken } = await login.execute(params);
+    const { accessToken, refreshToken, name, role, email } =
+      await login.execute(params);
 
     expect(accessToken).toEqual(initialToken.user.id);
     expect(refreshToken).toEqual(initialToken.user.id);
+    expect(name).toEqual(initialToken.user.name);
+    expect(email).toEqual(initialToken.user.email);
+    expect(role).toEqual(initialToken.user.role);
   });
 
   it('should not be able to login when email or password is incorrect', async () => {

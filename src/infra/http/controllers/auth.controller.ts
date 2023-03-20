@@ -69,14 +69,14 @@ export class AuthController {
     const { email, password } = loginDto;
 
     try {
-      const tokens = await this.login.execute({
+      const data = await this.login.execute({
         email,
         password,
         browser: userAgent.client?.name || 'Unknown',
         os: userAgent.os?.name || 'Unknown',
       });
 
-      return tokens;
+      return data;
     } catch (error: any) {
       throw new UnauthorizedException('Unauthorized', {
         cause: error,

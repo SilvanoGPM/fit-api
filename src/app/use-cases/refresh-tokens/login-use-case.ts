@@ -52,6 +52,8 @@ export class LoginUseCase {
       user,
     });
 
-    return { accessToken, refreshToken };
+    const { name, role } = user;
+
+    return { accessToken, refreshToken, email, name, role };
   }
 }
