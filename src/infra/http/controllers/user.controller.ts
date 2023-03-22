@@ -12,7 +12,15 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiUnprocessableEntityResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 import { Pageable } from '@app/repositories/pages.type';
 import { GetAllUsersUseCase } from '@app/use-cases/users/get-all-users-use-case';
@@ -33,6 +41,7 @@ import { ReplaceUserDTO } from '../dtos/users/replace-user.dto';
 import { PromoteUserDTO } from '../dtos/users/promote-user.dto';
 import { UserAlreadyExists } from '../errors/user-already-exists.error';
 
+@ApiTags('Usuários')
 @Controller('users')
 export class UserController {
   constructor(
@@ -46,6 +55,10 @@ export class UserController {
   ) {}
 
   @Get()
+  @UseGuards(IsAdmin)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retorna todos os usuários com paginação.' })
+  @ApiOkResponse({ description: 'Usuários encontrados com sucesso' })
   async getAll(@Query() query: Pageable) {
     const params = this.genericService.getPageParamsByQuery(query);
 
@@ -56,11 +69,19 @@ export class UserController {
 
   @Get('me')
   @UseGuards(IsUser)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retorna os dados do usuário atual.' })
+  @ApiOkResponse({ description: 'Dados encontrados com sucesso' })
   async getProfile(@CurrentUser() user: User) {
     return user;
   }
 
   @Get(':email')
+  @UseGuards(IsAdmin)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retorna um usuário pelo e-mail.' })
+  @ApiOkResponse({ description: 'Usuário encontrado com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhum usuário encontrado' })
   async getByEmail(@Param('email') email: string) {
     try {
       const { user } = await this.getUserByEmail.execute(email);
@@ -72,6 +93,8 @@ export class UserController {
   }
 
   @Get(':email/exists')
+  @ApiOperation({ summary: 'Verifica se um e-mail já está em uso.' })
+  @ApiOkResponse({ description: 'Verificação ocorreu com sucesso' })
   async existsByEmail(@Param('email') email: string) {
     const exists = await this.userExistsByEmail.execute(email);
 
@@ -79,6 +102,11 @@ export class UserController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Persiste um novo usuário.' })
+  @ApiCreatedResponse({ description: 'Usuário foi criado com sucesso' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na criação do usuário',
+  })
   async create(@Body() createUserDto: CreateUserDTO) {
     const { email, password, name } = createUserDto;
 
@@ -101,6 +129,12 @@ export class UserController {
   @Put()
   @UseGuards(IsUser)
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Atualiza um usuário.' })
+  @ApiOkResponse({ description: 'Usuário atualizado com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhum usuário encontrado' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido na atualiza do usuário',
+  })
   async replace(
     @CurrentUser() currentUser: User,
     @Body() replaceUserDto: ReplaceUserDTO,
@@ -125,6 +159,10 @@ export class UserController {
   @Patch('promote')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(IsAdmin)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Promove um usuário.' })
+  @ApiOkResponse({ description: 'Usuário promovido com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhum usuário encontrado' })
   async promote(@Body() promoteDto: PromoteUserDTO) {
     try {
       await this.promoteUser.execute(promoteDto.email, promoteDto.role);
