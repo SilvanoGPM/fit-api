@@ -14,6 +14,17 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 
+import {
+  ApiTags,
+  ApiOperation,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiBearerAuth,
+  ApiUnauthorizedResponse,
+  ApiNoContentResponse,
+  ApiForbiddenResponse,
+} from '@nestjs/swagger';
+
 import { Request } from 'express';
 import * as DeviceDetector from 'device-detector-js';
 
@@ -24,6 +35,7 @@ import { User } from '@app/entities/user';
 import { GetRefreshTokensByUserUseCase } from '@app/use-cases/refresh-tokens/get-refresh-tokens-by-user-use-case';
 import { Pageable } from '@app/repositories/pages.type';
 import { RevokeRefreshTokenUseCase } from '@app/use-cases/refresh-tokens/revoke-refresh-token-use-case';
+import { InsufficientPermissionError } from '@app/use-cases/errors/insufficient-permission.error';
 
 import { LoginDTO } from '../dtos/refresh-tokens/login.dto';
 import { RefreshTokenDTO } from '../dtos/refresh-tokens/refresh-token.dto';
@@ -32,8 +44,8 @@ import { GenericService } from '../services/generic.service';
 import { CurrentUser } from '../auth/guards/current-user.guard';
 import { IsUser } from '../auth/guards/is-user.guard';
 import { RefreshTokenNotFoundError } from '../errors/refresh-token-not-found.error';
-import { InsufficientPermissionError } from '@app/use-cases/errors/insufficient-permission.error';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   private deviceDetector = new DeviceDetector();
@@ -48,6 +60,9 @@ export class AuthController {
 
   @Get('/tokens')
   @UseGuards(IsUser)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retorna todos os toknes com paginação.' })
+  @ApiOkResponse({ description: 'Tokens encontrados com sucesso' })
   async getAllTokens(@CurrentUser() user: User, @Query() query: Pageable) {
     const params = this.genericService.getPageParamsByQuery(query);
 
@@ -61,6 +76,13 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Cria informações para se autenticar com dados pessoais.',
+  })
+  @ApiOkResponse({ description: 'Login realizado com sucesso' })
+  @ApiUnauthorizedResponse({
+    description: 'Não autorizado',
+  })
   async _login(@Body() loginDto: LoginDTO, @Req() req: Request) {
     const userAgent = this.deviceDetector.parse(
       req.headers['user-agent'] || '',
@@ -87,6 +109,13 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Cria informações para se autenticar com um refresh token.',
+  })
+  @ApiOkResponse({ description: 'Login realizado com sucesso' })
+  @ApiUnauthorizedResponse({
+    description: 'Token expirou | Não autorizado',
+  })
   async _refreshAccessToken(@Body() refreshTokenDto: RefreshTokenDTO) {
     try {
       const { accessToken } = await this.refreshAccessToken.execute(
@@ -109,6 +138,15 @@ export class AuthController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(IsUser)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Remove um determinado refresh token.',
+  })
+  @ApiNoContentResponse({ description: 'Remoção realizada com sucesso' })
+  @ApiForbiddenResponse({
+    description: 'Token não pertence ao usuário',
+  })
+  @ApiNotFoundResponse({ description: 'Token não encontrado' })
   async revoke(@CurrentUser() user: User, @Param('id') id: string) {
     try {
       await this.revokeRefreshToken.execute(id, user.email);
