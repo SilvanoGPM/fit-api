@@ -8,9 +8,9 @@ describe('SearchFoods use case', () => {
 
     const repositoryData = generateFoods(TOTAL_ELEMENTS);
 
-    const exerciceRepository = makeRepository(repositoryData);
+    const foodRepository = makeRepository(repositoryData);
 
-    const searchFoods = new SearchFoodsUseCase(exerciceRepository);
+    const searchFoods = new SearchFoodsUseCase(foodRepository);
 
     const params = {
       page: 1,
@@ -30,7 +30,7 @@ describe('SearchFoods use case', () => {
   });
 
   it('should be able to search foods with pagination', async () => {
-    const TOTAL_OF_EXERCICES_WITH_TEN_ON_NAME = 2;
+    const TOTAL_OF_FOODS_WITH_TEN_ON_NAME = 2;
 
     const repositoryData = generateFoods();
 
@@ -50,9 +50,9 @@ describe('SearchFoods use case', () => {
     expect(foods.hasNext).toBeFalsy();
     expect(foods.page).toEqual(params.page);
     expect(foods.size).toEqual(params.size);
-    expect(foods.total).toEqual(TOTAL_OF_EXERCICES_WITH_TEN_ON_NAME);
+    expect(foods.total).toEqual(TOTAL_OF_FOODS_WITH_TEN_ON_NAME);
 
-    expect(foods.data).toHaveLength(TOTAL_OF_EXERCICES_WITH_TEN_ON_NAME);
+    expect(foods.data).toHaveLength(TOTAL_OF_FOODS_WITH_TEN_ON_NAME);
     expect(foods.data[0]).toBeInstanceOf(Food);
   });
 });
