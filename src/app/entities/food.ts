@@ -12,6 +12,7 @@ interface Energy {
 
 export interface FoodProps {
   name: string;
+  images: string[];
   baseQuantity: number;
   baseUnit: string;
   category: string;
@@ -30,6 +31,7 @@ export interface CreateFoodProps extends BaseEntityProps {
   lipid: number;
   fiber: number;
   energy: number;
+  images?: string[];
 }
 
 export class Food extends BaseEntity<FoodProps> {
@@ -41,6 +43,7 @@ export class Food extends BaseEntity<FoodProps> {
       category: props.category,
       baseQuantity: 100,
       baseUnit: 'g',
+      images: props.images || [],
 
       energy: {
         kcal: props.energy,
@@ -75,6 +78,14 @@ export class Food extends BaseEntity<FoodProps> {
 
   public set name(name: string) {
     this.props.name = name;
+  }
+
+  public get images() {
+    return this.props.images;
+  }
+
+  public addImage(image: string) {
+    this.props.images.push(image);
   }
 
   public get baseQuantity() {

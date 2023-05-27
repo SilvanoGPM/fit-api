@@ -13,6 +13,7 @@ describe('Food entity', () => {
         baseQuantity: expect.any(Number),
         baseUnit: expect.any(String),
         category: expect.any(String),
+        images: expect.any(Array),
 
         energy: expect.objectContaining({
           kcal: expect.any(Number),
@@ -40,5 +41,13 @@ describe('Food entity', () => {
         },
       }),
     );
+  });
+
+  it('should be able to add a image', () => {
+    const food = makeFood();
+
+    food.addImage('test-image');
+
+    expect(food.images).toHaveLength(1);
   });
 });
