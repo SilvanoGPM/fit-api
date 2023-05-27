@@ -5,6 +5,7 @@ import { Food } from '@app/entities/food';
 
 interface CreateFoodProps {
   name: string;
+  images?: string[];
   categoryId?: number;
   energy: number;
   fiber: number;

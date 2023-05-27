@@ -7,6 +7,7 @@ import { FoodRepository } from '@app/repositories/food-repository';
 interface ReplaceFoodProps {
   id: string;
   name: string;
+  images?: string[];
   categoryId?: number;
   energy: number;
   fiber: number;

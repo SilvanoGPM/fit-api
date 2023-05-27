@@ -31,9 +31,9 @@ describe('ReplaceFood use case', () => {
   });
 
   it('should not be able to replace a food when it does not exists', async () => {
-    const exerciceRepository = makeRepository();
+    const foodRepository = makeRepository();
 
-    const replaceFood = new ReplaceFoodUseCase(exerciceRepository);
+    const replaceFood = new ReplaceFoodUseCase(foodRepository);
 
     const params = {
       name: 'test-name-modified',
