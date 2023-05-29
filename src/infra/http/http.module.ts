@@ -36,6 +36,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
 import { JwtRefreshTokenStrategy } from './auth/strategies/refresh.strategy';
 import { ReplaceUserUseCase } from '@app/use-cases/users/replace-user-use-case';
 import { PromoteUserUseCase } from '@app/use-cases/users/promote-user-use-case';
+import { AddFoodImageFoodUseCase } from '@app/use-cases/foods/add-food-image-use-case';
 
 @Module({
   imports: [DatabaseModule],
@@ -62,6 +63,7 @@ import { PromoteUserUseCase } from '@app/use-cases/users/promote-user-use-case';
     GetFoodByIdUseCase,
     CreateFoodUseCase,
     ReplaceFoodUseCase,
+    AddFoodImageFoodUseCase,
     SearchFoodsUseCase,
 
     GetAllUsersUseCase,

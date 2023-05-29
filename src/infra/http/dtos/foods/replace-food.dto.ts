@@ -9,6 +9,7 @@ import {
   Min,
   IsUUID,
   IsString,
+  IsUrl,
 } from 'class-validator';
 
 export class ReplaceFoodDTO {
@@ -22,6 +23,11 @@ export class ReplaceFoodDTO {
   @Length(5)
   @ApiProperty({ minLength: 5, description: 'Nome da comida.' })
   name: string;
+
+  @IsNotEmpty({ each: true })
+  @IsUrl(undefined, { each: true })
+  @ApiProperty({ description: 'Imagem da comida.' })
+  images: string[];
 
   @IsPositive()
   @IsNumber({ allowInfinity: false, allowNaN: false })

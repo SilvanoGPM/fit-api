@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -36,6 +37,8 @@ import { FoodNotFoundError } from '../errors/food-not-found.error';
 import { CreateFoodDTO } from '../dtos/foods/create-food.dto';
 import { ReplaceFoodDTO } from '../dtos/foods/replace-food.dto';
 import { IsAdmin } from '../auth/guards/is-admin.guard';
+import { AddFoodImageDTO } from '../dtos/foods/add-food-image.dto';
+import { AddFoodImageFoodUseCase } from '@app/use-cases/foods/add-food-image-use-case';
 
 type RawSearchFoods = Replace<
   SearchFoods,
@@ -59,6 +62,7 @@ export class FoodController {
     private getFoodById: GetFoodByIdUseCase,
     private createFood: CreateFoodUseCase,
     private replaceFood: ReplaceFoodUseCase,
+    private addFoodImage: AddFoodImageFoodUseCase,
     private genericService: GenericService,
   ) {}
 
@@ -144,11 +148,20 @@ export class FoodController {
     description: 'Campo inválido na criação da comida',
   })
   async create(@Body() createFoodDto: CreateFoodDTO) {
-    const { name, categoryId, energy, carbohydrate, fiber, lipid, protein } =
-      createFoodDto;
+    const {
+      name,
+      images,
+      categoryId,
+      energy,
+      carbohydrate,
+      fiber,
+      lipid,
+      protein,
+    } = createFoodDto;
 
     const { food } = await this.createFood.execute({
       name,
+      images,
       categoryId,
       energy,
       carbohydrate,
@@ -167,12 +180,13 @@ export class FoodController {
   @ApiOkResponse({ description: 'Comida atualizada com sucesso' })
   @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })
   @ApiUnprocessableEntityResponse({
-    description: 'Campo inválido na atualiza da comida',
+    description: 'Campo inválido na atualização da comida',
   })
   async replace(@Body() replaceFoodDto: ReplaceFoodDTO) {
     const {
       id,
       name,
+      images,
       categoryId,
       energy,
       carbohydrate,
@@ -185,12 +199,37 @@ export class FoodController {
       const { food } = await this.replaceFood.execute({
         id,
         name,
+        images,
         categoryId,
         energy,
         carbohydrate,
         fiber,
         lipid,
         protein,
+      });
+
+      return { food };
+    } catch (error) {
+      throw new FoodNotFoundError(error);
+    }
+  }
+
+  @Patch()
+  @UseGuards(IsAdmin)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Adiciona uma image a comida.' })
+  @ApiOkResponse({ description: 'Imagem adicionada com sucesso' })
+  @ApiNotFoundResponse({ description: 'Nenhuma comida encontrada' })
+  @ApiUnprocessableEntityResponse({
+    description: 'Campo inválido ao adicionar comida',
+  })
+  async addImage(@Body() addFoodImageDto: AddFoodImageDTO) {
+    const { id, image } = addFoodImageDto;
+
+    try {
+      const { food } = await this.addFoodImage.execute({
+        id,
+        image,
       });
 
       return { food };
