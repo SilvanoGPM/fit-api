@@ -77,6 +77,16 @@ describe('UserController', () => {
     });
   });
 
+  describe('me', () => {
+    it('should be able to return actual user', async () => {
+      const initialUser = makeUser();
+
+      const me = await userController.me(initialUser);
+
+      expect(me).toEqual(initialUser);
+    });
+  });
+
   describe('getByEmail', () => {
     it('should be able to get an user', async () => {
       const initialUser = makeUser();

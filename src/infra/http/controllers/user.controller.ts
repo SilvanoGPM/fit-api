@@ -72,7 +72,7 @@ export class UserController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Retorna os dados do usuário atual.' })
   @ApiOkResponse({ description: 'Dados encontrados com sucesso' })
-  async getProfile(@CurrentUser() user: User) {
+  async me(@CurrentUser() user: User) {
     return user;
   }
 
