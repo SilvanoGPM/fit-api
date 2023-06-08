@@ -1,14 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 
-import { GetAllUsersUseCase } from '@app/use-cases/users/get-all-users-use-case';
-import { GetUserByEmailUseCase } from '@app/use-cases/users/get-user-by-email-use-case';
-import { CreateUserUseCase } from '@app/use-cases/users/create-user-use-case';
-import { UserExistsByEmailUseCase } from '@app/use-cases/users/user-exists-by-email-use-case';
-import { GetUserByIdUseCase } from '@app/use-cases/users/get-user-by-id-use-case';
-import { ReplaceUserUseCase } from '@app/use-cases/users/replace-user-use-case';
-import { PromoteUserUseCase } from '@app/use-cases/users/promote-user-use-case';
-import { GenericService } from '../services/generic.service';
 import { User } from '@app/entities/user';
 
 import {
@@ -20,6 +12,8 @@ import {
 import { UserController } from './user.controller';
 import { UserRepository } from '@app/repositories/user-repository';
 import { UserNotFoundError } from '../errors/user-not-found.error';
+import { cases } from '../modules/user.module';
+import { GenericService } from '../services/generic.service';
 
 describe('UserController', () => {
   const userRepository = makeRepository();
@@ -36,13 +30,7 @@ describe('UserController', () => {
         },
 
         GenericService,
-        GetAllUsersUseCase,
-        GetUserByEmailUseCase,
-        GetUserByIdUseCase,
-        CreateUserUseCase,
-        ReplaceUserUseCase,
-        PromoteUserUseCase,
-        UserExistsByEmailUseCase,
+        ...cases,
       ],
     }).compile();
 
@@ -73,6 +61,53 @@ describe('UserController', () => {
       expect(users.total).toEqual(TOTAL_ELEMENTS);
 
       expect(users.data).toHaveLength(params.size);
+      expect(users.data[0]).toBeInstanceOf(User);
+    });
+  });
+
+  describe('search', () => {
+    it('should be able to search all users with pagination when search not send', async () => {
+      const TOTAL_ELEMENTS = 100;
+
+      userRepository.users = generateUsers(TOTAL_ELEMENTS);
+
+      const params = {
+        page: 1,
+        size: 10,
+      };
+
+      const users = await userController.search(params);
+
+      expect(users).toBeTruthy();
+      expect(users.hasNext).toBeTruthy();
+      expect(users.page).toEqual(1);
+      expect(users.size).toEqual(10);
+      expect(users.total).toEqual(TOTAL_ELEMENTS);
+
+      expect(users.data).toHaveLength(10);
+      expect(users.data[0]).toBeInstanceOf(User);
+    });
+
+    it('should be able to search users with pagination', async () => {
+      const TOTAL_OF_USERS_WITH_TEN_ON_NAME = 2;
+
+      userRepository.users = generateUsers();
+
+      const params = {
+        page: 1,
+        size: 10,
+        name: '10',
+      };
+
+      const users = await userController.search(params);
+
+      expect(users).toBeTruthy();
+      expect(users.hasNext).toBeFalsy();
+      expect(users.page).toEqual(params.page);
+      expect(users.size).toEqual(params.size);
+      expect(users.total).toEqual(TOTAL_OF_USERS_WITH_TEN_ON_NAME);
+
+      expect(users.data).toHaveLength(TOTAL_OF_USERS_WITH_TEN_ON_NAME);
       expect(users.data[0]).toBeInstanceOf(User);
     });
   });

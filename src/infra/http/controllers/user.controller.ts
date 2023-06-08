@@ -40,6 +40,8 @@ import { IsAdmin } from '../auth/guards/is-admin.guard';
 import { ReplaceUserDTO } from '../dtos/users/replace-user.dto';
 import { PromoteUserDTO } from '../dtos/users/promote-user.dto';
 import { UserAlreadyExists } from '../errors/user-already-exists.error';
+import { UserSearch } from '@app/repositories/user-repository';
+import { SearchUsersUseCase } from '@app/use-cases/users/search-users-use-case';
 
 @ApiTags('Usuários')
 @Controller('users')
@@ -47,6 +49,7 @@ export class UserController {
   constructor(
     private getAllUsers: GetAllUsersUseCase,
     private getUserByEmail: GetUserByEmailUseCase,
+    private searchUsers: SearchUsersUseCase,
     private userExistsByEmail: UserExistsByEmailUseCase,
     private createUser: CreateUserUseCase,
     private replaceUser: ReplaceUserUseCase,
@@ -63,6 +66,22 @@ export class UserController {
     const params = this.genericService.getPageParamsByQuery(query);
 
     const { users } = await this.getAllUsers.execute(params);
+
+    return users;
+  }
+
+  @Get('/search')
+  @UseGuards(IsAdmin)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Pesquisa todos os usuários com paginação.' })
+  @ApiOkResponse({ description: 'Usuários encontrados com sucesso' })
+  async search(@Query() search: UserSearch) {
+    const params = this.genericService.getPageParamsByQuery({
+      page: search.page,
+      size: search.size,
+    });
+
+    const { users } = await this.searchUsers.execute({ ...search, ...params });
 
     return users;
   }
