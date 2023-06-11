@@ -51,7 +51,7 @@ export class AuthController {
   private deviceDetector = new DeviceDetector();
 
   constructor(
-    private login: LoginUseCase,
+    private loginWithLocal: LoginUseCase,
     private getRefreshTokensByUser: GetRefreshTokensByUserUseCase,
     private refreshAccessToken: RefreshAccessTokenUseCase,
     private revokeRefreshToken: RevokeRefreshTokenUseCase,
@@ -83,7 +83,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({
     description: 'Não autorizado',
   })
-  async _login(@Body() loginDto: LoginDTO, @Req() req: Request) {
+  async login(@Body() loginDto: LoginDTO, @Req() req: Request) {
     const userAgent = this.deviceDetector.parse(
       req.headers['user-agent'] || '',
     );
@@ -91,7 +91,7 @@ export class AuthController {
     const { email, password } = loginDto;
 
     try {
-      const data = await this.login.execute({
+      const data = await this.loginWithLocal.execute({
         email,
         password,
         browser: userAgent.client?.name || 'Unknown',
@@ -116,7 +116,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({
     description: 'Token expirou | Não autorizado',
   })
-  async _refreshAccessToken(@Body() refreshTokenDto: RefreshTokenDTO) {
+  async refresh(@Body() refreshTokenDto: RefreshTokenDTO) {
     try {
       const { accessToken } = await this.refreshAccessToken.execute(
         refreshTokenDto.token,
